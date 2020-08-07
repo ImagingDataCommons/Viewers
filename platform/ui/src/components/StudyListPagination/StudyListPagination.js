@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup, Icon, Typography } from '@ohif/ui';
+import { isOS } from '../../utils';
 
 const StudyListPagination = ({
   onChangePage,
@@ -18,12 +19,12 @@ const StudyListPagination = ({
       <div className="container m-auto relative px-8">
         <div className="flex justify-between">
           <div className="flex items-center">
-            <div className="relative mr-3">
+            <div className="PageSelect relative mr-3">
               <select
                 value={perPage}
-                className="block appearance-none w-full bg-transparent border border-common-active text-white text-base px-2 pr-4 rounded leading-tight focus:outline-none h-8"
+                className={`block appearance-none w-full border border-common-active ${isOS('Win') ? 'bg-black' : 'bg-transparent'} text-white text-base px-2 pr-4 rounded leading-tight focus:outline-none h-8`}
                 onChange={e => onChangePerPage(e.target.value)}
-                onBlur={() => {}}
+                onBlur={() => { }}
               >
                 <option value="25">25</option>
                 <option value="50">50</option>
