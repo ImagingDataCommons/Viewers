@@ -146,7 +146,7 @@ workflows:
               only:
                 - master
 # Skip builds except to deploy:
-#                - idc-viewer-prod
+                - idc-viewer-prod
                 - idc-viewer-test
       - deploy_job:
           requires:
@@ -155,7 +155,7 @@ workflows:
             branches:
               only:
                 - master
-#                - idc-viewer-prod
+                - idc-viewer-prod
                 - idc-viewer-test
 
 #version: 2.1
