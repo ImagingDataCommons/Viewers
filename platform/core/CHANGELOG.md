@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.2](https://github.com/OHIF/Viewers/compare/@ohif/core@2.13.1...@ohif/core@2.13.2) (2021-03-25)
+
+
+### Bug Fixes
+
+* IDC-2288: Update toolbar tabs after derived displayset loaded ([#2307](https://github.com/OHIF/Viewers/issues/2307)) ([6e723eb](https://github.com/OHIF/Viewers/commit/6e723ebced58852007ca553792c740976cfc4201))
+
+
+
+
+
+## [2.13.1](https://github.com/OHIF/Viewers/compare/@ohif/core@2.13.0...@ohif/core@2.13.1) (2021-03-09)
+
+**Note:** Version bump only for package @ohif/core
+
+
+
+
+
+# [2.13.0](https://github.com/OHIF/Viewers/compare/@ohif/core@2.12.5...@ohif/core@2.13.0) (2021-03-04)
+
+
+### Features
+
+* **log:** add new log service ([14d6454](https://github.com/OHIF/Viewers/commit/14d6454eafaa2ccb50e133c2945c9558052ea27e))
+
+
+
+
+
+## [2.12.5](https://github.com/OHIF/Viewers/compare/@ohif/core@2.12.4...@ohif/core@2.12.5) (2021-03-03)
+
+**Note:** Version bump only for package @ohif/core
+
+
+
+
+
 ## [2.12.4](https://github.com/OHIF/Viewers/compare/@ohif/core@2.12.3...@ohif/core@2.12.4) (2021-02-25)
 
 **Note:** Version bump only for package @ohif/core
