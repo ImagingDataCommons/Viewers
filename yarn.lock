@@ -6619,10 +6619,10 @@ dateformat@^3.0.0:
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
   integrity sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==
 
-dcmjs@0.18.1:
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/dcmjs/-/dcmjs-0.18.1.tgz#5323ecb2227b0a956d6ba5df40c8cf775100ad0e"
-  integrity sha512-euySbMZW/WHOXfMjf9+QYg0X8691OMGfhMtEI0D1AebuwZZXx3IaDFfc6xcyA7kBti/sU3SFuGIEhxE+9AM97w==
+dcmjs@0.18.3:
+  version "0.18.3"
+  resolved "https://registry.yarnpkg.com/dcmjs/-/dcmjs-0.18.3.tgz#17d5a23d96b63264b8a1a859e4cb000b3e20495b"
+  integrity sha512-nmG6wEBcIMnadXAZOTcXwacBv+lrh8bqPwIKZwdy7AkdihLEwI6/OnyP+PYjzcdltuPu9wOQcKZionvXuCteag==
   dependencies:
     "@babel/polyfill" "^7.8.3"
     "@babel/runtime" "^7.8.4"
@@ -15698,10 +15698,10 @@ react-codemirror2@^6.0.0:
   resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-6.0.0.tgz#180065df57a64026026cde569a9708fdf7656525"
   integrity sha512-D7y9qZ05FbUh9blqECaJMdDwKluQiO3A9xB+fssd5jKM7YAXucRuEOlX32mJQumUvHUkHRHqXIPBjm6g0FW0Ag==
 
-react-cornerstone-viewport@4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/react-cornerstone-viewport/-/react-cornerstone-viewport-4.0.4.tgz#0e4291d9b0fe55c003e275175b0902ced61b0c80"
-  integrity sha512-RjCqOtQep04dRoHtsju0USlxN/vGUI2WnEt1aN84iYU7eZ+AXnwJo1nAd0RMX2obcXaGCIqMDtMRkE/zm3oZHw==
+react-cornerstone-viewport@4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/react-cornerstone-viewport/-/react-cornerstone-viewport-4.0.5.tgz#3de83cdd3643980e0330f3743f631dbbb24d98a7"
+  integrity sha512-uamDtFljWWEHe26kOBJJ1Bu//6hAgEra7BDVykOvtMC/W7kW34Q2fFX3ZwkL6TDdCQ94O6K98IXPS9HbrEJWYg==
   dependencies:
     classnames "^2.2.6"
     date-fns "^2.2.1"
