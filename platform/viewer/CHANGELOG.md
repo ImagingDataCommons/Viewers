@@ -3,6 +3,87 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.17](https://github.com/OHIF/Viewers/compare/@ohif/viewer@4.9.16...@ohif/viewer@4.9.17) (2021-05-17)
+
+**Note:** Version bump only for package @ohif/viewer
+
+
+
+
+
+
+## [4.9.16](https://github.com/OHIF/Viewers/compare/@ohif/viewer@4.9.15...@ohif/viewer@4.9.16) (2021-05-14)
+
+**Note:** Version bump only for package @ohif/viewer
+
+
+
+
+
+## [4.9.15](https://github.com/OHIF/Viewers/compare/@ohif/viewer@4.9.14...@ohif/viewer@4.9.15) (2021-04-22)
+
+**Note:** Version bump only for package @ohif/viewer
+
+
+
+
+
+## [4.9.14](https://github.com/OHIF/Viewers/compare/@ohif/viewer@4.9.13...@ohif/viewer@4.9.14) (2021-04-22)
+
+**Note:** Version bump only for package @ohif/viewer
+
+
+
+
+
+## [4.9.13](https://github.com/OHIF/Viewers/compare/@ohif/viewer@4.9.12...@ohif/viewer@4.9.13) (2021-04-21)
+
+**Note:** Version bump only for package @ohif/viewer
+
+
+
+
+
+## [4.9.12](https://github.com/OHIF/Viewers/compare/@ohif/viewer@4.9.11...@ohif/viewer@4.9.12) (2021-04-21)
+
+**Note:** Version bump only for package @ohif/viewer
+
+
+
+
+
+## [4.9.11](https://github.com/OHIF/Viewers/compare/@ohif/viewer@4.9.10...@ohif/viewer@4.9.11) (2021-04-21)
+
+**Note:** Version bump only for package @ohif/viewer
+
+
+
+
+
+## [4.9.10](https://github.com/OHIF/Viewers/compare/@ohif/viewer@4.9.9...@ohif/viewer@4.9.10) (2021-04-16)
+
+**Note:** Version bump only for package @ohif/viewer
+
+
+
+
+
+## [4.9.9](https://github.com/OHIF/Viewers/compare/@ohif/viewer@4.9.8...@ohif/viewer@4.9.9) (2021-04-15)
+
+**Note:** Version bump only for package @ohif/viewer
+
+
+
+
+
+## [4.9.8](https://github.com/OHIF/Viewers/compare/@ohif/viewer@4.9.7...@ohif/viewer@4.9.8) (2021-03-31)
+
+**Note:** Version bump only for package @ohif/viewer
+
+
+
+
+
 ## [4.9.7](https://github.com/OHIF/Viewers/compare/@ohif/viewer@4.9.6...@ohif/viewer@4.9.7) (2021-03-26)
 
 **Note:** Version bump only for package @ohif/viewer
