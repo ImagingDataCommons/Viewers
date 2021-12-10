@@ -279,6 +279,7 @@ workflows:
 #          command: yarn install --frozen-lockfile
 #
 #      - setup_remote_docker:
+#          version: 19.03.13
 #          docker_layer_caching: false
 #
 #      - run:
@@ -450,6 +451,7 @@ workflows:
 #      - attach_workspace:
 #          at: ~/repo
 #      - setup_remote_docker:
+#          version: 19.03.13
 #          docker_layer_caching: false
 #      - run:
 #          name: Build and push Docker image
