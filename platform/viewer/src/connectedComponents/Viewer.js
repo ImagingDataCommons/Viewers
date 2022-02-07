@@ -11,7 +11,7 @@ import ConnectedStudyBrowser from './ConnectedStudyBrowser.js';
 import ConnectedViewerMain from './ConnectedViewerMain.js';
 import SidePanel from './../components/SidePanel.js';
 import ErrorBoundaryDialog from './../components/ErrorBoundaryDialog';
-import { extensionManager } from './../App.js';
+import { extensionManager, servicesManager } from './../App.js';
 import { ReconstructionIssues } from './../../../core/src/enums.js';
 
 // Contexts
@@ -70,9 +70,11 @@ class Viewer extends Component {
     const { activeServer } = this.props;
     const server = Object.assign({}, activeServer);
 
+    const external = { servicesManager };
+
     OHIF.measurements.MeasurementApi.setConfiguration({
       dataExchange: {
-        retrieve: DICOMSR.retrieveMeasurements,
+        retrieve: server => DICOMSR.retrieveMeasurements(server, external),
         store: DICOMSR.storeMeasurements,
       },
       server,
@@ -539,6 +541,10 @@ const _checkForSeriesInconsistencesWarnings = async function(
       inconsistencyWarnings.push(
         'The datasets is missing frames: ' + displaySet.missingFrames + '.'
       );
+    }
+
+    if (displaySet.isModalitySupported === false) {
+      inconsistencyWarnings.push('The datasets modality is not supported.');
     }
   } else {
     const segMetadata = displaySet.metadata;
