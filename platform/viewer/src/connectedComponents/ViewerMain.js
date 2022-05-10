@@ -50,9 +50,11 @@ class ViewerMain extends Component {
       return;
     }
 
-    return study.displaySets.find(displaySet => {
+    const displaySet = study.displaySets.find(displaySet => {
       return displaySet.displaySetInstanceUID === displaySetInstanceUID;
     });
+
+    return displaySet;
   }
 
   componentDidMount() {
@@ -138,6 +140,10 @@ class ViewerMain extends Component {
       StudyInstanceUID,
       displaySetInstanceUID
     );
+
+    if (!displaySet) {
+      return;
+    }
 
     const { LoggerService, UINotificationService } = servicesManager.services;
 

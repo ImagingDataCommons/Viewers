@@ -18,7 +18,7 @@ window.config = {
   servers: {
     dicomWeb: [
       {
-        name: 'DCM4CHEE',
+        name: 'dcmjs',
         wadoUriRoot: 'https://server.dcmjs.org/dcm4chee-arc/aets/DCM4CHEE/wado',
         qidoRoot: 'https://server.dcmjs.org/dcm4chee-arc/aets/DCM4CHEE/rs',
         wadoRoot: 'https://server.dcmjs.org/dcm4chee-arc/aets/DCM4CHEE/rs',
@@ -26,10 +26,29 @@ window.config = {
         imageRendering: 'wadors',
         thumbnailRendering: 'wadors',
         enableStudyLazyLoad: true,
-        supportsFuzzyMatching: true,
       },
     ],
   },
+  enableGoogleCloudAdapter: true,
+  healthcareApiEndpoint: 'https://healthcare.googleapis.com/v1',
+  oidc: [
+    {
+      // ~ REQUIRED
+      // Authorization Server URL
+      authority: 'https://accounts.google.com',
+      client_id:
+        'YOURCLIENTID.apps.googleusercontent.com',
+      redirect_uri: '/callback', // `OHIFStandaloneViewer.js`
+      response_type: 'id_token token',
+      scope:
+        'email profile openid https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/cloud-healthcare', // email profile openid
+      // ~ OPTIONAL
+      post_logout_redirect_uri: '/logout-redirect.html',
+      revoke_uri: 'https://accounts.google.com/o/oauth2/revoke?token=',
+      automaticSilentRenew: true,
+      revokeAccessTokenOnSignout: true,
+    },
+  ],
 
   // Extensions should be able to suggest default values for these?
   // Or we can require that these be explicitly set

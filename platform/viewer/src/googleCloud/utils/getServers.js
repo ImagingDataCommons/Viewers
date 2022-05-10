@@ -20,6 +20,7 @@ const getServers = (data, name) => {
       thumbnailRendering: 'wadors',
       type: 'dicomWeb',
       active: true,
+      isGoogleStore: true,
       wadoUriRoot,
       qidoRoot,
       wadoRoot,
