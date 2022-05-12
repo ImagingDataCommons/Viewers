@@ -35,11 +35,11 @@ const retrieveMeasurementFromSR = async (
 
   const dicomWeb = new api.DICOMwebClient(config);
 
-  const instance = series.getFirstInstance();
+  const instance = series.instances[0];
   const options = {
-    studyInstanceUID: instance.getStudyInstanceUID(),
-    seriesInstanceUID: instance.getSeriesInstanceUID(),
-    sopInstanceUID: instance.getSOPInstanceUID(),
+    studyInstanceUID: instance.metadata.StudyInstanceUID,
+    seriesInstanceUID: instance.metadata.SeriesInstanceUID,
+    sopInstanceUID: instance.metadata.SOPInstanceUID,
   };
 
   const part10SRArrayBuffer = await dicomWeb.retrieveInstance(options);

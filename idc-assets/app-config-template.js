@@ -2,7 +2,7 @@ window.config = {
   // default: '/'
   routerBasename: '/',
   extensions: [],
-  disableMeasurementPanel: true,
+  disableMeasurementPanel: false,
   splitQueryParameterCalls: true,
   disableServersCache: true,
   showStudyList: false,
@@ -30,6 +30,26 @@ window.config = {
       },
     ],
   },
+  enableGoogleCloudAdapter: true,
+  healthcareApiEndpoint: 'https://healthcare.googleapis.com/v1',
+  oidc: [
+    {
+      // ~ REQUIRED
+      // Authorization Server URL
+      authority: 'https://accounts.google.com',
+      client_id:
+        'YOURCLIENTID.apps.googleusercontent.com',
+      redirect_uri: '/callback', // `OHIFStandaloneViewer.js`
+      response_type: 'id_token token',
+      scope:
+        'email profile openid https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/cloud-healthcare', // email profile openid
+      // ~ OPTIONAL
+      post_logout_redirect_uri: '/logout-redirect.html',
+      revoke_uri: 'https://accounts.google.com/o/oauth2/revoke?token=',
+      automaticSilentRenew: true,
+      revokeAccessTokenOnSignout: true,
+    },
+  ],
 
   // Extensions should be able to suggest default values for these?
   // Or we can require that these be explicitly set

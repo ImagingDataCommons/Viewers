@@ -3,13 +3,10 @@ import ViewerRetrieveStudyData from './ViewerRetrieveStudyData.js';
 import OHIF from '@ohif/core';
 
 const { clearViewportSpecificData, setStudyData } = OHIF.redux.actions;
-const isActive = a => a.active === true;
 
-const mapStateToProps = (state, ownProps) => {
-  const activeServer = state.servers.servers.find(isActive);
-
+const mapStateToProps = state => {
   return {
-    server: ownProps.server || activeServer,
+    servers: state.servers.servers,
   };
 };
 const mapDispatchToProps = dispatch => {

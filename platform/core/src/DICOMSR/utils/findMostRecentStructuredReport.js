@@ -8,12 +8,13 @@ const findMostRecentStructuredReport = studies => {
   let mostRecentStructuredReport;
 
   studies.forEach(study => {
-    const allSeries = study.getSeries ? study.getSeries() : [];
+    const allData = study.getData ? study.getData() : [];
+    const allSeries = allData.series;
     allSeries.forEach(series => {
       // Skip series that may not have instances yet
       // This can happen if we have retrieved just the initial
       // details about the series via QIDO-RS, but not the full metadata
-      if (!series || series.getInstanceCount() === 0) {
+      if (!series || !series.instances || series.instances.length === 0) {
         return;
       }
 
@@ -44,8 +45,8 @@ const isStructuredReportSeries = series => {
     '1.2.840.10008.5.1.4.1.1.88.34', // COMPREHENSIVE_3D_SR
   ];
 
-  const firstInstance = series.getFirstInstance();
-  const SOPClassUID = firstInstance.getData().metadata.SOPClassUID;
+  const firstInstance = series.instances[0];
+  const SOPClassUID = firstInstance.metadata.SOPClassUID;
 
   return supportedSopClassUIDs.includes(SOPClassUID);
 };
@@ -59,9 +60,9 @@ const isStructuredReportSeries = series => {
  */
 const compareSeriesDate = (series1, series2) => {
   return (
-    series1._data.SeriesDate > series2._data.SeriesDate ||
-    (series1._data.SeriesDate === series2._data.SeriesDate &&
-      series1._data.SeriesTime > series2._data.SeriesTime)
+    series1.SeriesDate > series2.SeriesDate ||
+    (series1.SeriesDate === series2.SeriesDate &&
+      series1.SeriesTime > series2.SeriesTime)
   );
 };
 

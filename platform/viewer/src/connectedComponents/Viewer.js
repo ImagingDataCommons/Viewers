@@ -67,19 +67,6 @@ class Viewer extends Component {
   constructor(props) {
     super(props);
 
-    const { activeServer } = this.props;
-    const server = Object.assign({}, activeServer);
-
-    const external = { servicesManager };
-
-    OHIF.measurements.MeasurementApi.setConfiguration({
-      dataExchange: {
-        retrieve: server => DICOMSR.retrieveMeasurements(server, external),
-        store: DICOMSR.storeMeasurements,
-      },
-      server,
-    });
-
     OHIF.measurements.TimepointApi.setConfiguration({
       dataExchange: {
         retrieve: this.retrieveTimepoints,
@@ -197,8 +184,8 @@ class Viewer extends Component {
     if (studies) {
       const PatientID = studies[0] && studies[0].PatientID;
 
-      timepointApi.retrieveTimepoints({ PatientID });
       if (isStudyLoaded) {
+        timepointApi.retrieveTimepoints({ PatientID });
         this.measurementApi.retrieveMeasurements(PatientID, [
           currentTimepointId,
         ]);
@@ -231,8 +218,8 @@ class Viewer extends Component {
       isStudyLoaded,
       activeViewportIndex,
       viewports,
+      activeServer,
     } = this.props;
-
     const activeViewport = viewports[activeViewportIndex];
     const activeDisplaySetInstanceUID = activeViewport
       ? activeViewport.displaySetInstanceUID
@@ -257,7 +244,19 @@ class Viewer extends Component {
         activeDisplaySetInstanceUID,
       });
     }
-    if (isStudyLoaded && isStudyLoaded !== prevProps.isStudyLoaded) {
+    if (prevProps.studies !== studies && studies.length !== 0) {
+      const server = Object.assign({}, activeServer);
+      console.info('bella4', server, studies);
+      const external = { servicesManager };
+
+      OHIF.measurements.MeasurementApi.setConfiguration({
+        dataExchange: {
+          retrieve: server => DICOMSR.retrieveMeasurements(server, external),
+          store: DICOMSR.storeMeasurements,
+        },
+        server,
+      });
+
       const PatientID = studies[0] && studies[0].PatientID;
       const { currentTimepointId } = this;
 
