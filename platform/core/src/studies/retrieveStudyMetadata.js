@@ -78,6 +78,9 @@ function __separateSeriesRequestToAggregatePromiseateSeriesRequestToAggregatePro
   const { seriesInstanceUID } = filters;
   const seriesInstanceUIDs = seriesInstanceUID.split(',');
 
+  const googleServers = servers.filter(server => server.isGoogleStore === true);
+  const nonGoogleServers = servers.filter(server => !server.isGoogleStore);
+
   return new Promise((resolve, reject) => {
     const promises = [];
 
@@ -87,22 +90,19 @@ function __separateSeriesRequestToAggregatePromiseateSeriesRequestToAggregatePro
       });
 
       promises.push(
-        RetrieveMetadata(servers, StudyInstanceUID, seriesSpecificFilters)
+        RetrieveMetadata(
+          nonGoogleServers,
+          StudyInstanceUID,
+          seriesSpecificFilters
+        )
       );
     });
 
+    promises.push(RetrieveMetadata(googleServers, StudyInstanceUID));
+
     Promise.all(promises).then(results => {
-      const data = results[0];
-
-      let series = [];
-
-      results.forEach(result => {
-        series = [...series, ...result.series];
-      });
-
-      data.series = series;
-
-      resolve(data);
+      results = [].concat(...results);
+      resolve(results);
     }, reject);
   });
 }

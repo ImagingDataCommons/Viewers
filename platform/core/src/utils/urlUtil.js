@@ -40,8 +40,12 @@ const parse = toParse => {
   return {};
 };
 const parseParam = paramStr => {
-  const _paramDecoded = decode(paramStr);
+  let _paramDecoded = decode(paramStr);
   if (_paramDecoded && typeof _paramDecoded === 'string') {
+    const indexOfFirst = _paramDecoded.indexOf('!secondGoogleServer=');
+    if (indexOfFirst !== -1) {
+      _paramDecoded = _paramDecoded.substring(0, indexOfFirst);
+    }
     return _paramDecoded.split(PARAM_SEPARATOR);
   }
 };

@@ -3,7 +3,7 @@ window.config = {
   routerBasename: '/',
   extensions: [],
   showStudyList: true,
-  filterQueryParam: false,
+  filterQueryParam: true,
   disableServersCache: false,
   studyPrefetcher: {
     enabled: true,
@@ -18,10 +18,13 @@ window.config = {
   servers: {
     dicomWeb: [
       {
-        name: 'dcmjs',
-        wadoUriRoot: 'https://server.dcmjs.org/dcm4chee-arc/aets/DCM4CHEE/wado',
-        qidoRoot: 'https://server.dcmjs.org/dcm4chee-arc/aets/DCM4CHEE/rs',
-        wadoRoot: 'https://server.dcmjs.org/dcm4chee-arc/aets/DCM4CHEE/rs',
+        name: 'IDC',
+        wadoUriRoot:
+          'https://dev-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v8-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
+        qidoRoot:
+          'https://dev-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v8-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
+        wadoRoot:
+          'https://dev-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v8-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
         qidoSupportsIncludeField: true,
         imageRendering: 'wadors',
         thumbnailRendering: 'wadors',
@@ -29,6 +32,7 @@ window.config = {
       },
     ],
   },
+
   enableGoogleCloudAdapter: true,
   healthcareApiEndpoint: 'https://healthcare.googleapis.com/v1',
   oidc: [
@@ -37,7 +41,7 @@ window.config = {
       // Authorization Server URL
       authority: 'https://accounts.google.com',
       client_id:
-        'YOURCLIENTID.apps.googleusercontent.com',
+        'client_id.apps.googleusercontent.com',
       redirect_uri: '/callback', // `OHIFStandaloneViewer.js`
       response_type: 'id_token token',
       scope:
