@@ -288,7 +288,9 @@ function ViewerRetrieveStudyData({
           study.StudyInstanceUID
         );
 
-        _addSeriesToStudy(studyMetadata, study.series[0]);
+        study.series.forEach(series => {
+          _addSeriesToStudy(studyMetadata, series);
+        });
 
         if (mergedStudies.length !== 0) {
           const found = mergedStudies.find(
@@ -419,7 +421,7 @@ function ViewerRetrieveStudyData({
     return remainingPromises;
   };
 
-  const loadStudies = useCallback(async () => {
+  const loadStudies = async () => {
     try {
       const filters = {};
       // Use the first, discard others
@@ -457,7 +459,7 @@ function ViewerRetrieveStudyData({
         log.error(error);
       }
     }
-  });
+  };
 
   const prevStudyInstanceUIDs = usePrevious(studyInstanceUIDs);
 

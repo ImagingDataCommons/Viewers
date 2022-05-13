@@ -246,7 +246,6 @@ class Viewer extends Component {
     }
     if (prevProps.studies !== studies && studies.length !== 0) {
       const server = Object.assign({}, activeServer);
-      console.info('bella4', server, studies);
       const external = { servicesManager };
 
       OHIF.measurements.MeasurementApi.setConfiguration({

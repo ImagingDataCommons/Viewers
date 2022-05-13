@@ -90,7 +90,7 @@ const ROUTES_DEF = {
   defaultAndgcloud: {
     viewer: {
       path:
-        '/viewer/:studyInstanceUIDs!secondGoogleServer=/projects/:project/locations/:location/datasets/:dataset/dicomStores/:dicomStore/study/:studyInstanceUIDs',
+        '/viewer/:studyInstanceUIDs!secondGoogleServer=/projects/:project/locations/:location/datasets/:dataset/dicomStores/:dicomStore',
       component: ViewerRouting,
       condition: appConfig => {
         return !!appConfig.enableGoogleCloudAdapter;

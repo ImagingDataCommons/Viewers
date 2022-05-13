@@ -30,6 +30,7 @@ window.config = {
       },
     ],
   },
+
   enableGoogleCloudAdapter: true,
   healthcareApiEndpoint: 'https://healthcare.googleapis.com/v1',
   oidc: [
@@ -38,7 +39,7 @@ window.config = {
       // Authorization Server URL
       authority: 'https://accounts.google.com',
       client_id:
-        'YOURCLIENTID.apps.googleusercontent.com',
+        'client_id.apps.googleusercontent.com',
       redirect_uri: '/callback', // `OHIFStandaloneViewer.js`
       response_type: 'id_token token',
       scope:
