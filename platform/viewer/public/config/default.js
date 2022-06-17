@@ -9,7 +9,7 @@ window.config = {
     enabled: true,
     order: 'closest',
     displaySetCount: 3,
-    preventCache: false,
+    preventCache: true,
     prefetchDisplaySetsTimeout: 300,
     maxNumPrefetchRequests: 100,
     displayProgress: true,
@@ -29,11 +29,11 @@ window.config = {
       {
         name: 'IDC',
         wadoUriRoot:
-          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v8-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
+          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v9-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
         qidoRoot:
-          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v8-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
+          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v9-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
         wadoRoot:
-          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v8-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
+          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v9-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
         qidoSupportsIncludeField: true,
         imageRendering: 'wadors',
         thumbnailRendering: 'wadors',
@@ -50,7 +50,7 @@ window.config = {
       // Authorization Server URL
       authority: 'https://accounts.google.com',
       client_id:
-        '70161151675-6843uup52vc5v14cn3nqdjb1ej5208ee.apps.googleusercontent.com',
+        '70161151675-72395655qs19cra281h4nl7a63q3t76q.apps.googleusercontent.com',
       redirect_uri: '/callback', // `OHIFStandaloneViewer.js`
       response_type: 'id_token token',
       scope:
