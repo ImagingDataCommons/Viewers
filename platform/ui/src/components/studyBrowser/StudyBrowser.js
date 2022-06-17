@@ -31,6 +31,7 @@ function StudyBrowser(props) {
                 SeriesNumber,
                 hasWarnings,
                 hasDerivedDisplaySets,
+                hasOriginServer,
               } = thumb;
 
               return (
@@ -56,6 +57,7 @@ function StudyBrowser(props) {
                     SeriesNumber={SeriesNumber}
                     hasWarnings={hasWarnings}
                     hasDerivedDisplaySets={hasDerivedDisplaySets}
+                    hasOriginServer={hasOriginServer}
                     // Events
                     onClick={onThumbnailClick.bind(
                       undefined,
