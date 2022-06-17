@@ -6,7 +6,7 @@ window.config = {
   filterQueryParam: true,
   disableServersCache: true,
   studyPrefetcher: {
-    enabled: false,
+    enabled: true,
     order: 'closest',
     displaySetCount: 3,
     preventCache: true,
