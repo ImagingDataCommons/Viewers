@@ -18,9 +18,11 @@ function ThumbnailFooter({
   numImageFrames,
   hasWarnings,
   hasDerivedDisplaySets,
+  hasOriginServer,
 }) {
   const [inconsistencyWarnings, inconsistencyWarningsSet] = useState([]);
   const [derivedDisplaySetsActive, derivedDisplaySetsActiveSet] = useState([]);
+  const [originServer, originServerSet] = useState([]);
 
   useEffect(() => {
     let unmounted = false;
@@ -34,10 +36,15 @@ function ThumbnailFooter({
         derivedDisplaySetsActiveSet(response);
       }
     });
+    hasOriginServer.then(response => {
+      if (!unmounted) {
+        originServerSet(response);
+      }
+    });
     return () => {
       unmounted = true;
     };
-  }, [hasWarnings, hasDerivedDisplaySets]);
+  }, [hasWarnings, hasDerivedDisplaySets, hasOriginServer]);
 
   const infoOnly = !SeriesDescription;
 
@@ -136,6 +143,13 @@ function ThumbnailFooter({
         </React.Fragment>
         {getDerivedInfo(derivedDisplaySetsActive)}
         {getWarningInfo(SeriesNumber, inconsistencyWarnings)}
+        <React.Fragment>
+          {originServer !== undefined ? (
+            originServer
+          ) : (
+            <React.Fragment></React.Fragment>
+          )}
+        </React.Fragment>
       </div>
     );
 
@@ -194,7 +208,7 @@ function Thumbnail(props) {
         onProgressChange
       );
     };
-  }, [displaySetInstanceUID]);
+  }, [displaySetInstanceUID, stackPercentComplete]);
 
   const [collectedProps, drag, dragPreview] = useDrag({
     // `droppedItem` in `dropTarget`
@@ -264,6 +278,7 @@ Thumbnail.propTypes = {
   SeriesNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   hasWarnings: PropTypes.instanceOf(Promise),
   hasDerivedDisplaySets: PropTypes.instanceOf(Promise),
+  hasOriginServer: PropTypes.instanceOf(Promise),
   numImageFrames: PropTypes.number,
   onDoubleClick: PropTypes.func,
   onClick: PropTypes.func,

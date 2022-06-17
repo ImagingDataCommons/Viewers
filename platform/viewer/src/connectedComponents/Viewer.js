@@ -482,6 +482,41 @@ const _checkForDerivedDisplaySets = async function(displaySet, study) {
 };
 
 /**
+ * Async function to check the origin server
+ *
+ * @param {*object} displaySet
+ * @returns {string}
+ */
+const _checkOriginServer = async function(displaySet) {
+  let dataUrl;
+  let originServer = '';
+  if (
+    displaySet.Modality &&
+    ['SEG', 'SR', 'RTSTRUCT', 'RTDOSE'].includes(displaySet.Modality)
+  ) {
+    dataUrl = displaySet.wadoUri;
+  } else if (displaySet.images && displaySet.images[0]) {
+    dataUrl = displaySet.images[0].getData().wadouri;
+  }
+
+  if (dataUrl) {
+    if (dataUrl.indexOf('testing-proxy.canceridc.dev') !== -1) {
+      originServer = 'IDC Test';
+    } else if (dataUrl.indexOf('dev-proxy.canceridc.dev') !== -1) {
+      originServer = 'IDC Dev';
+    } else if (
+      dataUrl.indexOf('viewer.imaging.datacommons.cancer.gov') !== -1
+    ) {
+      originServer = 'IDC Prod';
+    } else {
+      originServer = 'G Store';
+    }
+  }
+
+  return originServer;
+};
+
+/**
  * Async function to check if there are any inconsistences in the series.
  *
  * For segmentation returns any error during loading.
@@ -679,6 +714,8 @@ const _mapStudiesToThumbnails = function(studies, activeDisplaySetInstanceUID) {
         study
       );
 
+      const hasOriginServer = _checkOriginServer(displaySet);
+
       return {
         active: _isDisplaySetActive(
           displaySet,
@@ -693,6 +730,7 @@ const _mapStudiesToThumbnails = function(studies, activeDisplaySetInstanceUID) {
         SeriesNumber,
         hasWarnings,
         hasDerivedDisplaySets,
+        hasOriginServer,
       };
     });
 

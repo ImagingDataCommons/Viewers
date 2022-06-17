@@ -239,11 +239,11 @@ function ViewerRetrieveStudyData({
       isFilterStrategy
     );
     // Show message in case not promoted neither filtered but should to
-    _showUserMessage(
+    /*_showUserMessage(
       isQueryParamApplied,
       'Query parameters were not totally applied. It might be using original series list for given study.',
       snackbarContext
-    );
+    );*/
   };
 
   /**
