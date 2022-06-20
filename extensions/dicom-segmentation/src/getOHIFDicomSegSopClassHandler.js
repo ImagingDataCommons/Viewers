@@ -44,7 +44,7 @@ export default function getSopClassHandlerModule({ servicesManager }) {
       const segDisplaySet = {
         Modality: 'SEG',
         displaySetInstanceUID: utils.guid(),
-        wadoRoot: study.getData().wadoRoot,
+        wadoRoot: instance.getData().wadoRoot,
         wadoUri: instance.getData().wadouri,
         SOPInstanceUID,
         SeriesInstanceUID,

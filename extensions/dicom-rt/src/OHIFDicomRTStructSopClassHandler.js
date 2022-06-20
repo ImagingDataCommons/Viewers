@@ -40,7 +40,7 @@ const OHIFDicomRTStructSopClassHandler = {
     const rtStructDisplaySet = {
       Modality: 'RTSTRUCT',
       displaySetInstanceUID: utils.guid(),
-      wadoRoot: study.getData().wadoRoot,
+      wadoRoot: instance.getData().wadoRoot,
       wadoUri: instance.getData().wadouri,
       SOPInstanceUID,
       SeriesInstanceUID,

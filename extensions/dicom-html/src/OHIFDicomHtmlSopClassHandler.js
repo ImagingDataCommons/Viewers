@@ -36,7 +36,7 @@ const OHIFDicomHtmlSopClassHandler = {
       plugin: 'html',
       Modality: 'SR',
       displaySetInstanceUID: utils.guid(),
-      wadoRoot: study.getData().wadoRoot,
+      wadoRoot: instance.getData().wadoRoot,
       wadoUri: instance.getData().wadouri,
       SOPInstanceUID: instance.getSOPInstanceUID(),
       SeriesInstanceUID: series.getSeriesInstanceUID(),

@@ -2,19 +2,9 @@ window.config = {
   // default: '/'
   routerBasename: '/',
   extensions: [],
-  showStudyList: false,
+  showStudyList: true,
   filterQueryParam: true,
   disableServersCache: true,
-  studyPrefetcher: {
-    enabled: true,
-    order: 'closest',
-    displaySetCount: 3,
-    preventCache: true,
-    prefetchDisplaySetsTimeout: 300,
-    maxNumPrefetchRequests: 100,
-    displayProgress: true,
-    includeActiveDisplaySet: true,
-  },
   httpErrorHandler: error => {
     // This is 429 when rejected from the public idc sandbox too often.
     console.warn(error.status);
