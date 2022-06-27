@@ -716,7 +716,6 @@ const _mapStudiesToThumbnails = function(studies, activeDisplaySetInstanceUID) {
 
       const hasOriginServer = _checkOriginServer(displaySet);
 
-      console.info(displaySet);
       return {
         active: _isDisplaySetActive(
           displaySet,
