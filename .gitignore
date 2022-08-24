@@ -37,3 +37,7 @@ screenshots/
 
 # Locize settings
 .locize
+
+# firebase
+firebase.json
+.firebase/
