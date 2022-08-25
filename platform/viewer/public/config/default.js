@@ -2,7 +2,7 @@ window.config = {
   // default: '/'
   routerBasename: '/',
   extensions: [],
-  showStudyList: true,
+  showStudyList: false,
   filterQueryParam: true,
   disableServersCache: true,
   httpErrorHandler: error => {
