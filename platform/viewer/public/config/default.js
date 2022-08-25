@@ -19,11 +19,11 @@ window.config = {
       {
         name: 'IDC',
         wadoUriRoot:
-          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v9-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
+          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v10-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
         qidoRoot:
-          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v9-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
+          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v10-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
         wadoRoot:
-          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v9-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
+          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v10-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
         qidoSupportsIncludeField: true,
         imageRendering: 'wadors',
         thumbnailRendering: 'wadors',
