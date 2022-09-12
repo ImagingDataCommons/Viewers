@@ -156,7 +156,7 @@ class ViewerMain extends Component {
             title: 'DICOM Segmentation Loader',
             message: error.message,
             type: 'error',
-            autoClose: true,
+            autoClose: false,
           });
         };
 
