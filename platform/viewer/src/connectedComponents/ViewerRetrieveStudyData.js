@@ -179,10 +179,6 @@ const _updateStudyMetadataManager = (study, studyMetadata) => {
   if (!studyMetadataManager.get(StudyInstanceUID)) {
     studyMetadataManager.add(studyMetadata);
   }
-
-  if (study.derivedDisplaySets) {
-    studyMetadata._addDerivedDisplaySets(study.derivedDisplaySets);
-  }
 };
 
 const _thinStudyData = study => {
