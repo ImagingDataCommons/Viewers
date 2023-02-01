@@ -67,19 +67,6 @@ class Viewer extends Component {
   constructor(props) {
     super(props);
 
-    const { activeServer } = this.props;
-    const server = Object.assign({}, activeServer);
-
-    const external = { servicesManager };
-
-    OHIF.measurements.MeasurementApi.setConfiguration({
-      dataExchange: {
-        retrieve: server => DICOMSR.retrieveMeasurements(server, external),
-        store: DICOMSR.storeMeasurements,
-      },
-      server,
-    });
-
     OHIF.measurements.TimepointApi.setConfiguration({
       dataExchange: {
         retrieve: this.retrieveTimepoints,
@@ -197,8 +184,8 @@ class Viewer extends Component {
     if (studies) {
       const PatientID = studies[0] && studies[0].PatientID;
 
-      timepointApi.retrieveTimepoints({ PatientID });
       if (isStudyLoaded) {
+        timepointApi.retrieveTimepoints({ PatientID });
         this.measurementApi.retrieveMeasurements(PatientID, [
           currentTimepointId,
         ]);
@@ -231,8 +218,8 @@ class Viewer extends Component {
       isStudyLoaded,
       activeViewportIndex,
       viewports,
+      activeServer,
     } = this.props;
-
     const activeViewport = viewports[activeViewportIndex];
     const activeDisplaySetInstanceUID = activeViewport
       ? activeViewport.displaySetInstanceUID
@@ -257,7 +244,18 @@ class Viewer extends Component {
         activeDisplaySetInstanceUID,
       });
     }
-    if (isStudyLoaded && isStudyLoaded !== prevProps.isStudyLoaded) {
+    if (prevProps.studies !== studies && studies.length !== 0) {
+      const server = Object.assign({}, activeServer);
+      const external = { servicesManager };
+
+      OHIF.measurements.MeasurementApi.setConfiguration({
+        dataExchange: {
+          retrieve: server => DICOMSR.retrieveMeasurements(server, external),
+          store: DICOMSR.storeMeasurements,
+        },
+        server,
+      });
+
       const PatientID = studies[0] && studies[0].PatientID;
       const { currentTimepointId } = this;
 
@@ -488,6 +486,41 @@ const _checkForDerivedDisplaySets = async function(displaySet, study) {
 };
 
 /**
+ * Async function to check the origin server
+ *
+ * @param {*object} displaySet
+ * @returns {string}
+ */
+const _checkOriginServer = async function(displaySet) {
+  let dataUrl;
+  let originServer = '';
+  if (
+    displaySet.Modality &&
+    ['SEG', 'SR', 'RTSTRUCT', 'RTDOSE'].includes(displaySet.Modality)
+  ) {
+    dataUrl = displaySet.wadoUri;
+  } else if (displaySet.images && displaySet.images[0]) {
+    dataUrl = displaySet.images[0].getData().wadouri;
+  }
+
+  if (dataUrl) {
+    if (dataUrl.indexOf('testing-proxy.canceridc.dev') !== -1) {
+      originServer = 'IDC Test';
+    } else if (dataUrl.indexOf('dev-proxy.canceridc.dev') !== -1) {
+      originServer = 'IDC Dev';
+    } else if (
+      dataUrl.indexOf('viewer.imaging.datacommons.cancer.gov') !== -1
+    ) {
+      originServer = 'IDC Prod';
+    } else {
+      originServer = 'G Store';
+    }
+  }
+
+  return originServer;
+};
+
+/**
  * Async function to check if there are any inconsistences in the series.
  *
  * For segmentation returns any error during loading.
@@ -704,6 +737,8 @@ const _mapStudiesToThumbnails = function(studies, activeDisplaySetInstanceUID) {
         study
       );
 
+      const hasOriginServer = _checkOriginServer(displaySet);
+
       return {
         active: _isDisplaySetActive(
           displaySet,
@@ -718,6 +753,7 @@ const _mapStudiesToThumbnails = function(studies, activeDisplaySetInstanceUID) {
         SeriesNumber,
         hasWarnings,
         hasDerivedDisplaySets,
+        hasOriginServer,
       };
     });
 

@@ -8,14 +8,6 @@ import {
 import findMostRecentStructuredReport from './utils/findMostRecentStructuredReport';
 
 /**
- *
- * @typedef serverType
- * @property {string} type - type of the server
- * @property {string} wadoRoot - server wado root url
- *
- */
-
-/**
  * Function to be registered into MeasurementAPI to retrieve measurements from DICOM Structured Reports
  *
  * @param {serverType} server
@@ -32,7 +24,6 @@ const retrieveMeasurements = (server, external = {}) => {
 
   const serverUrl = server.wadoRoot;
   const studies = utils.studyMetadataManager.all();
-
   const latestSeries = findMostRecentStructuredReport(studies);
 
   if (!latestSeries) return Promise.resolve({});

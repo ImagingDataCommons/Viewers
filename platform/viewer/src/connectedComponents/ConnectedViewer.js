@@ -6,7 +6,20 @@ const { setTimepoints, setMeasurements } = OHIF.redux.actions;
 
 const getActiveServer = servers => {
   const isActive = a => a.active === true;
-  return servers.servers.find(isActive);
+  const isGoogleStore = a => a.isGoogleStore === true;
+
+  let activeServers = 0;
+  servers.servers.forEach(server => {
+    if (server.active === true) {
+      activeServers = activeServers + 1;
+    }
+  });
+
+  if (activeServers > 1) {
+    return servers.servers.find(isActive && isGoogleStore);
+  } else {
+    return servers.servers.find(isActive);
+  }
 };
 
 const mapStateToProps = state => {

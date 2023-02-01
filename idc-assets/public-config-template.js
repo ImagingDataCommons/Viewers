@@ -4,7 +4,7 @@ window.config = {
   enableGoogleCloudAdapter: true,
   studyListFunctionsEnabled: true,
   filterQueryParam: true,
-  disableMeasurementPanel: true,
+  disableMeasurementPanel: false,
   splitQueryParameterCalls: true,
   servers: {
     // This is an array, but we'll only use the first entry for now

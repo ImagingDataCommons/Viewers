@@ -12,8 +12,8 @@ import AppContext from '../context/AppContext';
 import NotFound from '../routes/NotFound';
 
 const { OHIFStudyMetadata, OHIFSeriesMetadata } = metadata;
-const { retrieveStudiesMetadata, deleteStudyMetadataPromise } = studies;
-const { studyMetadataManager, makeCancelable } = utils;
+const { retrieveStudiesMetadata } = studies;
+const { studyMetadataManager } = utils;
 
 const _promoteToFront = (list, values, searchMethod) => {
   let listCopy = [...list];
@@ -171,8 +171,6 @@ const _addSeriesToStudy = (studyMetadata, series) => {
   study.derivedDisplaySets = studyMetadata.getDerivedDatasets({
     Modality: series.Modality,
   });
-
-  _updateStudyMetadataManager(study, studyMetadata);
 };
 
 const _updateStudyMetadataManager = (study, studyMetadata) => {
@@ -180,19 +178,6 @@ const _updateStudyMetadataManager = (study, studyMetadata) => {
 
   if (!studyMetadataManager.get(StudyInstanceUID)) {
     studyMetadataManager.add(studyMetadata);
-  }
-};
-
-const _updateStudyDisplaySets = (study, studyMetadata) => {
-  const sopClassHandlerModules =
-    extensionManager.modules['sopClassHandlerModule'];
-
-  if (!study.displaySets) {
-    study.displaySets = studyMetadata.createDisplaySets(sopClassHandlerModules);
-  }
-
-  if (study.derivedDisplaySets) {
-    studyMetadata._addDerivedDisplaySets(study.derivedDisplaySets);
   }
 };
 
@@ -206,7 +191,7 @@ const _thinStudyData = study => {
 };
 
 function ViewerRetrieveStudyData({
-  server,
+  servers,
   studyInstanceUIDs,
   seriesInstanceUIDs,
   clearViewportSpecificData,
@@ -223,8 +208,6 @@ function ViewerRetrieveStudyData({
     maxConcurrentMetadataRequests,
   } = appConfig;
 
-  let cancelableSeriesPromises;
-  let cancelableStudiesPromises;
   /**
    * Callback method when study is totally loaded
    * @param {object} study study loaded
@@ -252,57 +235,161 @@ function ViewerRetrieveStudyData({
       isFilterStrategy
     );
     // Show message in case not promoted neither filtered but should to
-    _showUserMessage(
+    /*_showUserMessage(
       isQueryParamApplied,
       'Query parameters were not totally applied. It might be using original series list for given study.',
       snackbarContext
-    );
-
-    setStudies([...studies, study]);
+    );*/
   };
 
   /**
    * Method to process studies. It will update displaySet, studyMetadata, load remaining series, ...
-   * @param {Array} studiesData Array of studies retrieved from server
+   * @param {Array} studiesData Array of studies retrieved from server, each study is an array (each element is a server)
    * @param {Object} [filters] - Object containing filters to be applied
    * @param {string} [filters.seriesInstanceUID] - series instance uid to filter results against
    */
-  const processStudies = (studiesData, filters) => {
+  const processStudies = async (studiesData, filters) => {
+    studiesData = [].concat(...studiesData);
     if (Array.isArray(studiesData) && studiesData.length > 0) {
       // Map studies to new format, update metadata manager?
-      const studies = studiesData.map(study => {
-        setStudyData(study.StudyInstanceUID, _thinStudyData(study));
+      const studiesLoading = await Promise.all(
+        await studiesData.map(async study => {
+          const studyMetadata = new OHIFStudyMetadata(
+            study,
+            study.StudyInstanceUID
+          );
+
+          // Attempt to load remaning series if any
+          try {
+            await loadRemainingSeries(studyMetadata);
+          } catch (error) {
+            if (error) {
+              setError(error);
+              log.error(error);
+            }
+          }
+
+          return study;
+        })
+      );
+
+      // for one StudyUID we could have N study object at this point (for N server).
+      // we merge them in 1 unique study, since OHIF-v2 assume only one object for each StudyUID.
+      // duplicate series will be removed.
+      let mergedStudies = [];
+      for (let i = 0; i < studiesLoading.length; i++) {
+        const study = studiesLoading[i];
         const studyMetadata = new OHIFStudyMetadata(
           study,
           study.StudyInstanceUID
         );
 
-        _updateStudyDisplaySets(study, studyMetadata);
+        study.series.forEach(series => {
+          _addSeriesToStudy(studyMetadata, series);
+        });
+
+        if (mergedStudies.length !== 0) {
+          const found = mergedStudies.find(
+            mergedStudy =>
+              mergedStudy.StudyInstanceUID === study.StudyInstanceUID
+          );
+
+          if (found !== -1) {
+            continue;
+          }
+        }
+
+        for (let j = 0; j < studiesLoading.length; j++) {
+          if (i === j) {
+            continue;
+          }
+
+          const comparedStudy = studiesLoading[j];
+          if (study.StudyInstanceUID !== comparedStudy.StudyInstanceUID) {
+            continue;
+          }
+
+          if (comparedStudy.series && comparedStudy.series.length !== 0) {
+            comparedStudy.series.forEach(series => {
+              if (study.series.length !== 0) {
+                const found = study.series.find(
+                  studySeries =>
+                    studySeries.SeriesInstanceUID === series.SeriesInstanceUID
+                );
+                if (found) {
+                  return;
+                }
+              }
+
+              study.series.push(series);
+              _addSeriesToStudy(studyMetadata, series);
+            });
+          }
+
+          if (
+            comparedStudy.derivedDisplaySets &&
+            comparedStudy.derivedDisplaySets.length !== 0
+          ) {
+            comparedStudy.derivedDisplaySets.forEach(derivedDisplaySet => {
+              if (study.derivedDisplaySets.length !== 0) {
+                const found = study.derivedDisplaySets.find(
+                  studyDerivedDisplaySet =>
+                    studyDerivedDisplaySet.SeriesInstanceUID ===
+                    derivedDisplaySet.SeriesInstanceUID
+                );
+                if (found) {
+                  return;
+                }
+              }
+
+              study.derivedDisplaySets.push(derivedDisplaySet);
+            });
+          }
+
+          if (
+            comparedStudy.displaySets &&
+            comparedStudy.displaySets.length !== 0
+          ) {
+            comparedStudy.displaySets.forEach(displaySet => {
+              if (study.displaySets.length !== 0) {
+                const found = study.displaySets.find(
+                  studyDisplaySet =>
+                    studyDisplaySet.SeriesInstanceUID ===
+                    displaySet.SeriesInstanceUID
+                );
+                if (found) {
+                  return;
+                }
+              }
+
+              study.displaySets.push(displaySet);
+            });
+          }
+
+          if (comparedStudy.seriesMap) {
+            for (let key in comparedStudy.seriesMap) {
+              for (let prop in study.seriesMap) {
+                if (prop === key) {
+                  continue;
+                }
+              }
+
+              study.seriesMap[key] = comparedStudy.seriesMap[key];
+            }
+          }
+        }
+
+        study.displaySets.forEach(displaySet => {
+          studyMetadata.addDisplaySet(displaySet);
+        });
+
         _updateStudyMetadataManager(study, studyMetadata);
+        setStudyData(study.StudyInstanceUID, _thinStudyData(study));
+        studyDidLoad(study, studyMetadata, filters);
+        mergedStudies.push(study);
+      }
 
-        // Attempt to load remaning series if any
-        cancelableSeriesPromises[study.StudyInstanceUID] = makeCancelable(
-          loadRemainingSeries(studyMetadata)
-        )
-          .then(result => {
-            if (result && !result.isCanceled) {
-              studyDidLoad(study, studyMetadata, filters);
-            }
-          })
-          .catch(error => {
-            if (error && !error.isCanceled) {
-              setError(error);
-              log.error(error);
-            }
-          })
-          .finally(() => {
-            setIsStudyLoaded(true);
-          });
-
-        return study;
-      });
-
-      setStudies(studies);
+      setStudies(mergedStudies);
     }
   };
 
@@ -335,7 +422,7 @@ function ViewerRetrieveStudyData({
       const filters = {};
       // Use the first, discard others
       const seriesInstanceUID = seriesInstanceUIDs && seriesInstanceUIDs[0];
-      const retrieveParams = [server, studyInstanceUIDs];
+      const retrieveParams = [servers, studyInstanceUIDs];
 
       if (seriesInstanceUID) {
         filters.seriesInstanceUID = seriesInstanceUID;
@@ -352,20 +439,16 @@ function ViewerRetrieveStudyData({
         retrieveParams.push(true); // Seperate SeriesInstanceUID filter calls.
       }
 
-      cancelableStudiesPromises[studyInstanceUIDs] = makeCancelable(
-        retrieveStudiesMetadata(...retrieveParams)
-      )
-        .then(result => {
-          if (result && !result.isCanceled) {
-            processStudies(result, filters);
-          }
-        })
-        .catch(error => {
-          if (error && !error.isCanceled) {
-            setError(error);
-            log.error(error);
-          }
-        });
+      try {
+        const result = await retrieveStudiesMetadata(...retrieveParams);
+        await processStudies(result, filters);
+        setIsStudyLoaded(true);
+      } catch (error) {
+        if (error) {
+          setError(error);
+          log.error(error);
+        }
+      }
     } catch (error) {
       if (error) {
         setError(error);
@@ -373,22 +456,6 @@ function ViewerRetrieveStudyData({
       }
     }
   };
-
-  const purgeCancellablePromises = useCallback(() => {
-    for (let studyInstanceUIDs in cancelableStudiesPromises) {
-      if ('cancel' in cancelableStudiesPromises[studyInstanceUIDs]) {
-        cancelableStudiesPromises[studyInstanceUIDs].cancel();
-      }
-    }
-
-    for (let studyInstanceUIDs in cancelableSeriesPromises) {
-      if ('cancel' in cancelableSeriesPromises[studyInstanceUIDs]) {
-        cancelableSeriesPromises[studyInstanceUIDs].cancel();
-        deleteStudyMetadataPromise(studyInstanceUIDs);
-        studyMetadataManager.remove(studyInstanceUIDs);
-      }
-    }
-  });
 
   const prevStudyInstanceUIDs = usePrevious(studyInstanceUIDs);
 
@@ -400,18 +467,13 @@ function ViewerRetrieveStudyData({
 
     if (hasStudyInstanceUIDsChanged) {
       studyMetadataManager.purge();
-      purgeCancellablePromises();
     }
-  }, [prevStudyInstanceUIDs, purgeCancellablePromises, studyInstanceUIDs]);
+  }, [prevStudyInstanceUIDs, studyInstanceUIDs]);
 
   useEffect(() => {
-    cancelableSeriesPromises = {};
-    cancelableStudiesPromises = {};
     loadStudies();
 
-    return () => {
-      purgeCancellablePromises();
-    };
+    return () => {};
   }, []);
 
   if (error) {
@@ -435,7 +497,7 @@ function ViewerRetrieveStudyData({
 ViewerRetrieveStudyData.propTypes = {
   studyInstanceUIDs: PropTypes.array.isRequired,
   seriesInstanceUIDs: PropTypes.array,
-  server: PropTypes.object,
+  servers: PropTypes.object,
   clearViewportSpecificData: PropTypes.func.isRequired,
   setStudyData: PropTypes.func.isRequired,
 };

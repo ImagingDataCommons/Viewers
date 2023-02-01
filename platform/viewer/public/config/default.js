@@ -2,27 +2,28 @@ window.config = {
   // default: '/'
   routerBasename: '/',
   extensions: [],
-  disableMeasurementPanel: false,
-  splitQueryParameterCalls: true,
-  disableServersCache: true,
   showStudyList: false,
   filterQueryParam: true,
+  disableServersCache: true,
   httpErrorHandler: error => {
     // This is 429 when rejected from the public idc sandbox too often.
     console.warn(error.status);
     if (error.status == 429) {
       // Could use services manager here to bring up a dialog/modal if needed.
-      // console.warn('test, navigate to https://ohif.org/');
-      window.location = '_X___IDC__Z__QUOTA___Y_';
+      console.warn('test, navigate to https://ohif.org/');
+      window.location = 'https://ohif.org/';
     }
   },
   servers: {
     dicomWeb: [
       {
         name: 'IDC',
-        wadoUriRoot: '_X___IDC__Z__ROOT___Y_',
-        qidoRoot: '_X___IDC__Z__ROOT___Y_',
-        wadoRoot: '_X___IDC__Z__ROOT___Y_',
+        wadoUriRoot:
+          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v10-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
+        qidoRoot:
+          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v10-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
+        wadoRoot:
+          'https://testing-proxy.canceridc.dev/v1/projects/canceridc-data/locations/us/datasets/idc/dicomStores/v10-viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
         qidoSupportsIncludeField: true,
         imageRendering: 'wadors',
         thumbnailRendering: 'wadors',

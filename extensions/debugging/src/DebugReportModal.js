@@ -34,7 +34,7 @@ const DubugReportModal = ({
     // App version
 
     body += '== App ==\n';
-    body += `version\t${window.version}\n\n`;
+    body += `version\t${window.version} (fork: IDC2servers)\n\n`;
 
     // Extensions Versions
 
@@ -210,7 +210,7 @@ const getAppVersion = () => {
       </tr>
       <tr>
         <td>Version</td>
-        <td>{window.version}</td>
+        <td>{window.version} (fork: IDC2servers)</td>
       </tr>
     </React.Fragment>
   );

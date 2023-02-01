@@ -7,7 +7,7 @@ const StudyMetaDataPromises = new Map();
 /**
  * Retrieves study metadata
  *
- * @param {Object} server Object with server configuration parameters
+ * @param {Array} servers array with server Objects with server configuration parameters
  * @param {string} StudyInstanceUID The UID of the Study to be retrieved
  * @param {Object} [filters] - Object containing filters to be applied on retrieve metadata process
  * @param {string} [filter.seriesInstanceUID] - series instance uid to filter results against
@@ -16,7 +16,7 @@ const StudyMetaDataPromises = new Map();
  * @returns {Promise} that will be resolved with the metadata or rejected with the error
  */
 export function retrieveStudyMetadata(
-  server,
+  servers,
   StudyInstanceUID,
   filters,
   separateSeriesInstanceUIDFilters = false
@@ -25,8 +25,10 @@ export function retrieveStudyMetadata(
   // and further requests for that metadata will always fail. On failure, we probably need to remove the
   // corresponding promise from the "StudyMetaDataPromises" map...
 
-  if (!server) {
-    throw new Error(`${moduleName}: Required 'server' parameter not provided.`);
+  if (!servers) {
+    throw new Error(
+      `${moduleName}: Required 'servers' parameter not provided.`
+    );
   }
   if (!StudyInstanceUID) {
     throw new Error(
@@ -48,20 +50,12 @@ export function retrieveStudyMetadata(
     separateSeriesInstanceUIDFilters
   ) {
     promise = __separateSeriesRequestToAggregatePromiseateSeriesRequestToAggregatePromise(
-      server,
+      servers,
       StudyInstanceUID,
       filters
     );
   } else {
-    promise = RetrieveMetadata(server, StudyInstanceUID, filters);
-
-    /*
-    promise = new Promise((resolve, reject) => {
-      RetrieveMetadata(server, StudyInstanceUID, filters).then(function(data) {
-        resolve(data);
-      }, reject);
-    });
-    */
+    promise = RetrieveMetadata(servers, StudyInstanceUID, filters);
   }
 
   // Store the promise in cache
@@ -72,17 +66,20 @@ export function retrieveStudyMetadata(
 
 /**
  * Splits up seriesInstanceUID filters to multiple calls for platforms
- * @param {Object} server Object with server configuration parameters
+ * @param {Array} servers array with server Objects with server configuration parameters
  * @param {string} StudyInstanceUID The UID of the Study to be retrieved
  * @param {Object} filters - Object containing filters to be applied on retrieve metadata process
  */
 function __separateSeriesRequestToAggregatePromiseateSeriesRequestToAggregatePromise(
-  server,
+  servers,
   StudyInstanceUID,
   filters
 ) {
   const { seriesInstanceUID } = filters;
   const seriesInstanceUIDs = seriesInstanceUID.split(',');
+
+  const googleServers = servers.filter(server => server.isGoogleStore === true);
+  const nonGoogleServers = servers.filter(server => !server.isGoogleStore);
 
   return new Promise((resolve, reject) => {
     const promises = [];
@@ -93,22 +90,19 @@ function __separateSeriesRequestToAggregatePromiseateSeriesRequestToAggregatePro
       });
 
       promises.push(
-        RetrieveMetadata(server, StudyInstanceUID, seriesSpecificFilters)
+        RetrieveMetadata(
+          nonGoogleServers,
+          StudyInstanceUID,
+          seriesSpecificFilters
+        )
       );
     });
 
+    promises.push(RetrieveMetadata(googleServers, StudyInstanceUID));
+
     Promise.all(promises).then(results => {
-      const data = results[0];
-
-      let series = [];
-
-      results.forEach(result => {
-        series = [...series, ...result.series];
-      });
-
-      data.series = series;
-
-      resolve(data);
+      results = [].concat(...results);
+      resolve(results);
     }, reject);
   });
 }

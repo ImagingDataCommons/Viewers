@@ -4,7 +4,6 @@ import usePrevious from './usePrevious';
 
 import * as GoogleCloudUtilServers from '../googleCloud/utils/getServers';
 import { useSelector, useDispatch } from 'react-redux';
-import isEqual from 'lodash.isequal';
 
 // Contexts
 import AppContext from '../context/AppContext';
@@ -64,11 +63,7 @@ const useServerFromUrl = (
   previousServers,
   activeServer,
   urlBasedServers,
-  appConfig,
-  project,
-  location,
-  dataset,
-  dicomStore
+  appConfig
 ) => {
   // update state from url available only when gcloud on
   if (!appConfig.enableGoogleCloudAdapter) {
@@ -109,7 +104,6 @@ export default function useServer({
   const servers = useSelector(state => state && state.servers);
   const previousServers = usePrevious(servers);
   const dispatch = useDispatch();
-
   const { appConfig = {} } = useContext(AppContext);
 
   const activeServer = getActiveServer(servers);
@@ -128,8 +122,14 @@ export default function useServer({
   );
 
   if (shouldUpdateServer) {
-    setServers(dispatch, urlBasedServers);
+    const mergedServers = [...servers.servers, ...urlBasedServers];
+    setServers(dispatch, mergedServers);
+    return mergedServers[0];
   } else if (isValidServer(activeServer, appConfig)) {
     return activeServer;
+  }
+
+  if (servers.servers && servers.servers.length > 0) {
+    return servers.servers[0];
   }
 }
