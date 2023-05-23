@@ -20,7 +20,7 @@ window.config = {
     {
       authority: 'https://accounts.google.com',
       client_id:
-        '723928408739-k9k9r3i44j32rhu69vlnibipmmk9i57p.apps.googleusercontent.com',
+        '370953977065-o32uf5cn5f4bovtogdu862mlnhbcv9hk.apps.googleusercontent.com',
       redirect_uri: '/callback',
       response_type: 'id_token token',
       scope:
@@ -118,7 +118,7 @@ window.config = {
     console.warn('test, navigate to https://ohif.org/');
   },
   whiteLabeling: {
-    createLogoComponentFn: function (React) {
+    createLogoComponentFn: function(React) {
       return React.createElement(
         'a',
         {

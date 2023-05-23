@@ -62,7 +62,6 @@
     "@ohif/extension-dicom-video": "^3.0.1",
     "@ohif/extension-dicom-microscopy": "^3.0.0",
     "@ohif/extension-test": "0.0.1",
-    "@ohif/extension-gcp": "^1.0.0",
     "@ohif/i18n": "^1.0.0",
     "@ohif/mode-basic-dev-mode": "^3.0.0",
     "@ohif/mode-test": "^0.0.1",
