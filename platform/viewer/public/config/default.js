@@ -86,8 +86,14 @@ window.config = {
         supportsFuzzyMatching: false,
         supportsWildcard: false,
         staticWado: true,
-        singlepart: 'bulkdata,video,pdf',
-        useBulkDataURI: false,
+        singlepart: 'bulkdata,video',
+        // whether the data source should use retrieveBulkData to grab metadata,
+        // and in case of relative path, what would it be relative to, options
+        // are in the series level or study level (some servers like series some study)
+        bulkDataURI: {
+          enabled: true,
+          relativeResolution: 'studies',
+        },
       },
     },
     {
