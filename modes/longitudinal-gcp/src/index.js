@@ -71,6 +71,7 @@ function modeFactory() {
     id,
     routeName:
       '/projects/:project/locations/:location/datasets/:dataset/dicomStores/:dicomStore/study/:StudyInstanceUIDs',
+    noWorklistButton: true,
     displayName: 'GCP',
     /**
      * Lifecycle hooks
@@ -177,7 +178,7 @@ function modeFactory() {
       series: [],
     },
 
-    isValidMode: function ({ modalities }) {
+    isValidMode: function({ modalities }) {
       const modalities_list = modalities.split('\\');
 
       // Exclude non-image modalities
@@ -195,6 +196,7 @@ function modeFactory() {
           return {
             id: ohif.layout,
             props: {
+              isReturnEnabled: false,
               leftPanels: [tracked.thumbnailList],
               rightPanels: [dicomSeg.panel, tracked.measurements],
               rightPanelDefaultClosed: true,

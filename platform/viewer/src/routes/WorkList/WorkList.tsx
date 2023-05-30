@@ -53,7 +53,7 @@ function WorkList({
 }) {
   const { hotkeyDefinitions, hotkeyDefaults } = hotkeysManager;
   const { show, hide } = useModal();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const query = useQuery();
   const params = useParams();
   // ~ Modes
@@ -344,6 +344,10 @@ function WorkList({
             const isFirst = i === 0;
 
             const modalitiesToCheck = modalities.replaceAll('/', '\\');
+
+            if (mode.noWorklistButton === true) {
+              return;
+            }
 
             const isValidMode = mode.isValidMode({
               modalities: modalitiesToCheck,
