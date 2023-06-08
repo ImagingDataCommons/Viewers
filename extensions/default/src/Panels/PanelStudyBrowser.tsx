@@ -264,6 +264,7 @@ function PanelStudyBrowser({
 
 PanelStudyBrowser.propTypes = {
   servicesManager: PropTypes.object.isRequired,
+  validationManager: PropTypes.object.isRequired,
   dataSource: PropTypes.shape({
     getImageIdsForDisplaySet: PropTypes.func.isRequired,
   }).isRequired,

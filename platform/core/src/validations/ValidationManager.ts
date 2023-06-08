@@ -1,4 +1,3 @@
-
 export default class ValidationManager {
   private _displaySetValidations: any;
   // private _studyValidations: any;
@@ -6,17 +5,22 @@ export default class ValidationManager {
   // private _imageValidations: any;
   private _validationModules: any;
 
-  constructor({
-    commandsManager,
-    servicesManager,
-    hotkeysManager,
-    appConfig = {},
-  }: any) {
-
+  // constructor({
+  //   commandsManager,
+  //   servicesManager,
+  //   hotkeysManager,
+  //   appConfig = {},
+  // }: any) {}
+  constructor(commandsManager, servicesManager) {
+    // (JU) Initialise these private variables, not sure is needed, but viewer loaded ok after adding them ...
+    this._validationModules = [];
+    this._displaySetValidations = [];
   }
-
   public registerValidationModule(validationModule: any) {
+    console.log('JU - validationModules:');
+    console.log(this._validationModules);
     this._validationModules.push(validationModule);
+
     validationModule.validations.forEach(validationDefinition => {
       this.registerValidationDefinition(validationDefinition);
     });
@@ -25,6 +29,7 @@ export default class ValidationManager {
   public registerValidationDefinition(validationDefinition: any) {
     switch (validationDefinition.type) {
       case 'displaySet':
+        console.log('nada...');
         this._displaySetValidations.push(validationDefinition);
         break;
       // case 'study':
@@ -40,7 +45,9 @@ export default class ValidationManager {
   }
 
   public validateDisplaySet(displaySet: any) {
-    const validationResults = this._displaySetValidations.map(validationDefinition => validationDefinition.validate(displaySet));
+    const validationResults = this._displaySetValidations.map(
+      validationDefinition => validationDefinition.validate(displaySet)
+    );
 
     // validationResults.forEach(validationResult => {
     //   if (validationResult.messageType === 'toast') {

@@ -2,6 +2,9 @@ import { isImage } from '@ohif/core/src/utils/isImage';
 import sopClassDictionary from '@ohif/core/src/utils/sopClassDictionary';
 import ImageSet from '@ohif/core/src/classes/ImageSet';
 import isDisplaySetReconstructable from '@ohif/core/src/utils/isDisplaySetReconstructable';
+// JU
+import ValidationManager from '@ohif/core/src/validations';
+
 import { id } from './id';
 
 const sopClassHandlerName = 'stack';
@@ -14,6 +17,8 @@ const makeDisplaySet = instances => {
   const instance = instances[0];
   const imageSet = new ImageSet(instances);
 
+  // JU
+  const validationSet = new ValidationManager();
   const {
     value: isReconstructable,
     averageSpacingBetweenFrames,

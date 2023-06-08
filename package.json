@@ -29,6 +29,7 @@
     "dev": "lerna run dev:viewer --stream",
     "dev:project": ".scripts/dev.sh",
     "dev:orthanc": "lerna run dev:orthanc --stream",
+    "dev:orthandex": "lerna run dev:orthandex --stream",
     "dev:dcm4chee": "lerna run dev:dcm4chee --stream",
     "dev:static": "lerna run dev:static --stream",
     "orthanc:up": "docker-compose -f .docker/Nginx-Orthanc/docker-compose.yml up",
