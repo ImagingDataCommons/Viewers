@@ -100,7 +100,7 @@
     "start-server-and-test": "^1.10.0",
     "style-loader": "^1.0.0",
     "styled-components": "^5.3.5",
-    "stylelint": "^10.1.0",
+    "stylelint": "^15.10.1",
     "stylelint-config-recommended": "^2.2.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
