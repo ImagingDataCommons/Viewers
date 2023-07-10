@@ -94,6 +94,7 @@ window.config = {
           enabled: true,
           relativeResolution: 'studies',
         },
+        omitQuotationForMultipartRequest: true,
       },
     },
     {
