@@ -156,11 +156,7 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
       },
       instances: {
         search: (studyInstanceUid, queryParameters) => {
-          const headers = userAuthenticationService.getAuthorizationHeader();
-          if (headers) {
-            qidoDicomWebClient.headers = headers;
-          }
-
+          qidoDicomWebClient.headers = getAuthrorizationHeader();
           qidoSearch.call(
             undefined,
             qidoDicomWebClient,
@@ -193,6 +189,7 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
         );
       },
       bulkDataURI: async ({ StudyInstanceUID, BulkDataURI }) => {
+        qidoDicomWebClient.headers = getAuthrorizationHeader();
         const options = {
           multipart: false,
           BulkDataURI,
@@ -211,11 +208,6 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
           sortFunction,
           madeInClient = false,
         } = {}) => {
-          const headers = userAuthenticationService.getAuthorizationHeader();
-          if (headers) {
-            wadoDicomWebClient.headers = headers;
-          }
-
           if (!StudyInstanceUID) {
             throw new Error(
               'Unable to query for SeriesMetadata without StudyInstanceUID'
@@ -245,17 +237,12 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
 
     store: {
       dicom: async (dataset, request) => {
-        const headers = userAuthenticationService.getAuthorizationHeader();
-        if (headers) {
-          wadoDicomWebClient.headers = headers;
-        }
-
+        wadoDicomWebClient.headers = getAuthrorizationHeader();
         if (dataset instanceof ArrayBuffer) {
           const options = {
             datasets: [dataset],
             request,
           };
-
           await wadoDicomWebClient.storeInstances(options);
         } else {
           const meta = {
@@ -293,7 +280,7 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
       madeInClient
     ) => {
       const enableStudyLazyLoad = false;
-
+      wadoDicomWebClient.headers = generateWadoHeader();
       // data is all SOPInstanceUIDs
       const data = await retrieveStudyMetadata(
         wadoDicomWebClient,
@@ -364,6 +351,7 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
       madeInClient = false
     ) => {
       const enableStudyLazyLoad = true;
+      wadoDicomWebClient.headers = generateWadoHeader();
       // Get Series
       const { preLoadData: seriesSummaryMetadata, promises: seriesPromises } =
         await retrieveStudyMetadata(

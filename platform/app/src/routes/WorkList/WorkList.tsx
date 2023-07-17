@@ -340,10 +340,11 @@ function WorkList({
               : []
           }
         >
-          {appConfig.loadedModes.map((mode, i) => {
-            const isFirst = i === 0;
+          <div className="flex flex-row gap-2">
+            {appConfig.loadedModes.map((mode, i) => {
+              const isFirst = i === 0;
 
-            const modalitiesToCheck = modalities.replaceAll('/', '\\');
+              const modalitiesToCheck = modalities.replaceAll('/', '\\');
 
             if (mode.noWorklistButton === true) {
               return;
@@ -380,11 +381,20 @@ function WorkList({
                   className={classnames({ 'ml-2': !isFirst })}
                   onClick={() => {}}
                 >
-                  {t(`Modes:${mode.displayName}`)}
-                </LegacyButton>
-              </Link>
-            );
-          })}
+                  {/* TODO revisit the completely rounded style of buttons used for launching a mode from the worklist later - for now use LegacyButton*/}
+                  <LegacyButton
+                    rounded="full"
+                    variant={isValidMode ? 'contained' : 'disabled'}
+                    disabled={!isValidMode}
+                    endIcon={<Icon name="launch-arrow" />} // launch-arrow | launch-info
+                    onClick={() => {}}
+                  >
+                    {t(`Modes:${mode.displayName}`)}
+                  </LegacyButton>
+                </Link>
+              );
+            })}
+          </div>
         </StudyListExpandedRow>
       ),
       onClickRow: () =>
