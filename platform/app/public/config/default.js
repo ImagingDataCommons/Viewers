@@ -15,7 +15,7 @@ window.config = {
     thumbnail: 75,
     prefetch: 25,
   },
-  defaultDataSourceName: 'dicomweb',
+  defaultDataSourceName: 'gcpdicomweb',
   oidc: [
     {
       authority: 'https://accounts.google.com',
