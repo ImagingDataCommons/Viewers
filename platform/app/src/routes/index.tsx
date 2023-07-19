@@ -43,7 +43,6 @@ const createRoutes = ({
   const routes =
     buildModeRoutes({
       modes,
-
       dataSources,
       extensionManager,
       servicesManager,
