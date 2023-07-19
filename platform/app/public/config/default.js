@@ -1,21 +1,44 @@
 window.config = {
   routerBasename: '/',
+  whiteLabeling: {
+    createLogoComponentFn: function(React) {
+      return React.createElement(
+        'a',
+        {
+          target: '_self',
+          rel: 'noopener noreferrer',
+          className: 'text-purple-600 line-through',
+          href: '/',
+        },
+        React.createElement('img', {
+          src: '/assets/idc.svg',
+          className: 'w-14 h-14',
+        })
+      );
+    },
+  },
   extensions: [],
   modes: [],
-  customizationService: {},
+  customizationService: {
+    // Shows a custom route -access via http://localhost:3000/custom
+    // helloPage: '@ohif/extension-default.customizationModule.helloPage',
+  },
   showStudyList: true,
+  // some windows systems have issues with more than 3 web workers
   maxNumberOfWebWorkers: 3,
-  omitQuotationForMultipartRequest: true,
+  // below flag is for performance reasons, but it might not work for all servers
   showWarningMessageForCrossOrigin: true,
   showCPUFallbackMessage: true,
-  showLoadingIndicator: false,
+  showLoadingIndicator: true,
   strictZSpacingForVolumeViewport: true,
   maxNumRequests: {
     interaction: 100,
     thumbnail: 75,
+    // Prefetch number is dependent on the http protocol. For http 2 or
+    // above, the number of requests can be go a lot higher.
     prefetch: 25,
   },
-  defaultDataSourceName: 'gcpdicomweb',
+  defaultDataSourceName: 'dicomweb',
   oidc: [
     {
       authority: 'https://accounts.google.com',
@@ -121,25 +144,11 @@ window.config = {
     },
   ],
   httpErrorHandler: error => {
+    // This is 429 when rejected from the public idc sandbox too often.
     console.warn(error.status);
+
+    // Could use services manager here to bring up a dialog/modal if needed.
     console.warn('test, navigate to https://ohif.org/');
-  },
-  whiteLabeling: {
-    createLogoComponentFn: function(React) {
-      return React.createElement(
-        'a',
-        {
-          target: '_self',
-          rel: 'noopener noreferrer',
-          className: 'text-purple-600 line-through',
-          href: '/',
-        },
-        React.createElement('img', {
-          src: '/assets/idc.svg',
-          className: 'w-14 h-14',
-        })
-      );
-    },
   },
   hotkeys: [
     {
@@ -171,12 +180,23 @@ window.config = {
     { commandName: 'resetViewport', label: 'Reset', keys: ['space'] },
     { commandName: 'nextImage', label: 'Next Image', keys: ['down'] },
     { commandName: 'previousImage', label: 'Previous Image', keys: ['up'] },
+    // {
+    //   commandName: 'previousViewportDisplaySet',
+    //   label: 'Previous Series',
+    //   keys: ['pagedown'],
+    // },
+    // {
+    //   commandName: 'nextViewportDisplaySet',
+    //   label: 'Next Series',
+    //   keys: ['pageup'],
+    // },
     {
       commandName: 'setToolActive',
       commandOptions: { toolName: 'Zoom' },
       label: 'Zoom',
       keys: ['z'],
     },
+    // ~ Window level presets
     {
       commandName: 'windowLevelPreset1',
       label: 'W/L Preset 1',

@@ -70,7 +70,7 @@ function modeFactory() {
     // We should not be.
     id,
     routeName:
-      '/projects/:project/locations/:location/datasets/:dataset/dicomStores/:dicomStore/study/:StudyInstanceUIDs',
+      'projects/:project/locations/:location/datasets/:dataset/dicomStores/:dicomStore/study/:StudyInstanceUIDs',
     noWorklistButton: true,
     displayName: 'GCP',
     /**

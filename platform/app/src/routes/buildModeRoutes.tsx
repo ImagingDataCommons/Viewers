@@ -23,7 +23,6 @@ import ModeRoute from '@routes/Mode';
  */
 export default function buildModeRoutes({
   modes,
-  modesConfiguration = [],
   dataSources,
   extensionManager,
   servicesManager,
@@ -67,12 +66,7 @@ export default function buildModeRoutes({
     const defaultDataSourceName = extensionManager.defaultDataSourceName;
 
     // Add default DataSource route.
-    let path = `/${mode.routeName}`;
-
-    const config = modesConfiguration.find(m => m.mode === mode.id);
-    if (config && config.baseUrl) {
-      path = config.baseUrl;
-    }
+    const path = `/${mode.routeName}`;
 
     // TODO move up.
     const children = () => (

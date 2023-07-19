@@ -32,7 +32,6 @@ const notFoundRoute = { component: NotFound };
 
 const createRoutes = ({
   modes,
-  modesConfiguration,
   dataSources,
   extensionManager,
   servicesManager,
@@ -44,7 +43,7 @@ const createRoutes = ({
   const routes =
     buildModeRoutes({
       modes,
-      modesConfiguration,
+
       dataSources,
       extensionManager,
       servicesManager,
@@ -61,8 +60,9 @@ const createRoutes = ({
     props: { children: WorkList, servicesManager },
   };
 
-  const customRoutes =
-    customizationService.getGlobalCustomization('customRoutes');
+  const customRoutes = customizationService.getGlobalCustomization(
+    'customRoutes'
+  );
   const allRoutes = [
     ...routes,
     ...(showStudyList ? [WorkListRoute] : []),
