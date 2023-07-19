@@ -5,7 +5,6 @@ import { MODULE_TYPES } from '@ohif/core';
 //
 import { extensionManager } from '../App.tsx';
 import { useParams, useLocation } from 'react-router';
-import { useQuery } from '@hooks';
 
 /**
  * Uses route properties to determine the data source that should be passed
@@ -17,7 +16,6 @@ import { useQuery } from '@hooks';
  */
 function DataSourceWrapper(props) {
   const { children: LayoutTemplate, ...rest } = props;
-  const query = useQuery();
   const params = useParams();
   const location = useLocation();
 
@@ -77,7 +75,6 @@ function DataSourceWrapper(props) {
     // 204: no content
     async function getData() {
       setIsLoading(true);
-      await dataSource.initialize({ params, query });
       const studies = await dataSource.query.studies.search(queryFilterValues);
 
       setData({
