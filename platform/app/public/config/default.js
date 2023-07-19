@@ -29,7 +29,7 @@ window.config = {
   // below flag is for performance reasons, but it might not work for all servers
   showWarningMessageForCrossOrigin: true,
   showCPUFallbackMessage: true,
-  showLoadingIndicator: true,
+  showLoadingIndicator: false,
   strictZSpacingForVolumeViewport: true,
   maxNumRequests: {
     interaction: 100,

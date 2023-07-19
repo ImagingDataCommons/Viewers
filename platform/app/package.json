@@ -65,6 +65,7 @@
     "@ohif/i18n": "3.7.0-beta.33",
     "@ohif/mode-basic-dev-mode": "3.7.0-beta.33",
     "@ohif/mode-longitudinal": "3.7.0-beta.33",
+    "@ohif/mode-longitudinal-gcp": "1.1.0",
     "@ohif/mode-microscopy": "3.7.0-beta.33",
     "@ohif/mode-test": "3.7.0-beta.33",
     "@ohif/ui": "3.7.0-beta.33",
