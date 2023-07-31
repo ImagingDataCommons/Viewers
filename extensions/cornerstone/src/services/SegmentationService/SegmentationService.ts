@@ -621,9 +621,9 @@ class SegmentationService extends PubSubService {
         functionalGroupIndex,
         functionalGroup,
       ] of segmentInfo.functionalGroups.entries()) {
-        const {
-          ReferencedSOPInstanceUID,
-        } = functionalGroup.DerivationImageSequence.SourceImageSequence;
+        const ReferencedSOPInstanceUID =
+          functionalGroup?.DerivationImageSequence?.SourceImageSequence
+            ?.ReferencedSOPInstanceUID;
 
         const imageIdIndex = sopUIDImageIdIndexMap[ReferencedSOPInstanceUID];
 
