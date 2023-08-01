@@ -8,7 +8,9 @@ import { useTranslation } from 'react-i18next';
 export default function PanelSegmentation({
   servicesManager,
   commandsManager,
+  appConfig,
 }) {
+  const disableEditing = appConfig?.disableEditing;
   const { segmentationService, uiDialogService } = servicesManager.services;
 
   const { t } = useTranslation('PanelSegmentation');
@@ -203,6 +205,7 @@ export default function PanelSegmentation({
           onSegmentationEdit={onSegmentationEdit}
           onSegmentClick={onSegmentClick}
           onSegmentEdit={onSegmentEdit}
+          disableEditing={disableEditing}
           onSegmentColorClick={onSegmentColorClick}
           onSegmentDelete={onSegmentDelete}
           onToggleSegmentVisibility={onToggleSegmentVisibility}
