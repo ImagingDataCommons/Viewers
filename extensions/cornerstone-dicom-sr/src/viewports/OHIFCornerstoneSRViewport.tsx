@@ -25,6 +25,7 @@ function OHIFCornerstoneSRViewport(props) {
     viewportOptions,
     servicesManager,
     extensionManager,
+    appConfig,
   } = props;
 
   const {
@@ -38,6 +39,7 @@ function OHIFCornerstoneSRViewport(props) {
     throw new Error('SR viewport should only have a single display set');
   }
 
+  const disableHydration = appConfig?.disableHydration;
   const srDisplaySet = displaySets[0];
 
   const [viewportGrid, viewportGridService] = useViewportGrid();
@@ -76,7 +78,7 @@ function OHIFCornerstoneSRViewport(props) {
     sendTrackedMeasurementsEvent = (eventName, { displaySetInstanceUID }) => {
       measurementService.clearMeasurements();
       const { SeriesInstanceUIDs } = hydrateStructuredReport(
-        { servicesManager, extensionManager },
+        { servicesManager, extensionManager, appConfig },
         displaySetInstanceUID
       );
       const displaySets = displaySetService.getDisplaySetsForSeries(
@@ -375,6 +377,7 @@ function OHIFCornerstoneSRViewport(props) {
             isRehydratable: srDisplaySet.isRehydratable,
             isLocked,
             sendTrackedMeasurementsEvent,
+            disableHydration,
           })
         }
         studyData={{
@@ -463,6 +466,7 @@ function _getStatusComponent({
   isRehydratable,
   isLocked,
   sendTrackedMeasurementsEvent,
+  disableHydration,
 }) {
   const handleMouseUp = () => {
     sendTrackedMeasurementsEvent('HYDRATE_SR', {
@@ -532,6 +536,12 @@ function _getStatusComponent({
       )}
     </div>
   );
+
+  // if (disableHydration) {
+  //   setTimeout(() => {
+  //     handleMouseUp();
+  //   }, 300);
+  // }
 
   return (
     <>

@@ -27,26 +27,24 @@ function initDefaultToolGroup(
       { toolName: toolNames.StackScrollMouseWheel, bindings: [] },
     ],
     passive: [
+      { toolName: toolNames.Length },
+      { toolName: toolNames.ArrowAnnotate },
+      { toolName: toolNames.Bidirectional },
       { toolName: toolNames.DragProbe },
+      { toolName: toolNames.EllipticalROI },
+      { toolName: toolNames.CircleROI },
+      { toolName: toolNames.RectangleROI },
       { toolName: toolNames.StackScroll },
       { toolName: toolNames.Angle },
       { toolName: toolNames.CobbAngle },
+      { toolName: toolNames.PlanarFreehandROI },
       { toolName: toolNames.Magnify },
       { toolName: toolNames.SegmentationDisplay },
       { toolName: toolNames.CalibrationLine },
     ],
     // enabled
     // disabled
-    disabled: [
-      { toolName: toolNames.ReferenceLines },
-      { toolName: toolNames.Length },
-      { toolName: toolNames.ArrowAnnotate },
-      { toolName: toolNames.Bidirectional },
-      { toolName: toolNames.EllipticalROI },
-      { toolName: toolNames.CircleROI },
-      { toolName: toolNames.RectangleROI },
-      { toolName: toolNames.PlanarFreehandROI },
-    ],
+    disabled: [{ toolName: toolNames.ReferenceLines }],
   };
 
   const toolsConfig = {

@@ -11,6 +11,7 @@ import createSEGToolGroupAndAddTools from '../utils/initSEGToolGroup';
 import promptHydrateSEG from '../utils/promptHydrateSEG';
 import hydrateSEGDisplaySet from '../utils/_hydrateSEG';
 import _getStatusComponent from './_getStatusComponent';
+import { Enums as csToolsEnums } from '@cornerstonejs/tools';
 
 const { formatDate } = utils;
 const SEG_TOOLGROUP_BASE_NAME = 'SEGToolGroup';
@@ -24,6 +25,7 @@ function OHIFCornerstoneSEGViewport(props) {
     viewportLabel,
     servicesManager,
     extensionManager,
+    appConfig,
   } = props;
 
   const { t } = useTranslation('SEGViewport');
@@ -34,6 +36,7 @@ function OHIFCornerstoneSEGViewport(props) {
     segmentationService,
     uiNotificationService,
     customizationService,
+    cornerstoneViewportService,
   } = servicesManager.services;
 
   const toolGroupId = `${SEG_TOOLGROUP_BASE_NAME}-${viewportIndex}`;
@@ -43,9 +46,20 @@ function OHIFCornerstoneSEGViewport(props) {
     throw new Error('SEG viewport should only have a single display set');
   }
 
+  const disableHydration = appConfig?.disableHydration;
+
   const segDisplaySet = displaySets[0];
 
   const [viewportGrid, viewportGridService] = useViewportGrid();
+
+  const isSegmentationReady = () => {
+    return (
+      segmentationService.getLabelmapVolume(
+        segDisplaySet.displaySetInstanceUID
+      ) &&
+      segmentationService.getSegmentation(segDisplaySet.displaySetInstanceUID)
+    );
+  };
 
   // States
   const [isToolGroupCreated, setToolGroupCreated] = useState(false);
@@ -155,15 +169,17 @@ function OHIFCornerstoneSEGViewport(props) {
       return;
     }
 
-    promptHydrateSEG({
-      servicesManager,
-      viewportIndex,
-      segDisplaySet,
-    }).then(isHydrated => {
-      if (isHydrated) {
-        setIsHydrated(true);
-      }
-    });
+    if (!disableHydration) {
+      promptHydrateSEG({
+        servicesManager,
+        viewportIndex,
+        segDisplaySet,
+      }).then(isHydrated => {
+        if (isHydrated) {
+          setIsHydrated(true);
+        }
+      });
+    }
   }, [servicesManager, viewportIndex, segDisplaySet, segIsLoading]);
 
   useEffect(() => {
@@ -248,8 +264,6 @@ function OHIFCornerstoneSEGViewport(props) {
       toolGroupId
     );
 
-    setToolGroupCreated(true);
-
     return () => {
       // remove the segmentation representations if seg displayset changed
       segmentationService.removeSegmentationRepresentationFromToolGroup(
@@ -318,6 +332,12 @@ function OHIFCornerstoneSEGViewport(props) {
     setIsHydrated(isHydrated);
   };
 
+  if (!isHydrated && !segIsLoading && disableHydration) {
+    setTimeout(() => {
+      onStatusClick();
+    }, 300);
+  }
+
   return (
     <>
       <ViewportActionBar
@@ -344,7 +364,9 @@ function OHIFCornerstoneSEGViewport(props) {
             patientSex: PatientSex || '',
             patientAge: PatientAge || '',
             MRN: PatientID || '',
-            thickness: SliceThickness ? `${parseFloat(SliceThickness).toFixed(2)}mm` : '',
+            thickness: SliceThickness
+              ? `${parseFloat(SliceThickness).toFixed(2)}mm`
+              : '',
             spacing:
               SpacingBetweenSlices !== undefined
                 ? `${parseFloat(SpacingBetweenSlices).toFixed(2)}mm`

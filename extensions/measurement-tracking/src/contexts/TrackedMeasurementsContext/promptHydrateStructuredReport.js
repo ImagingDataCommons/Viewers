@@ -12,7 +12,7 @@ const RESPONSE = {
 };
 
 function promptHydrateStructuredReport(
-  { servicesManager, extensionManager },
+  { servicesManager, extensionManager, appConfig },
   ctx,
   evt
 ) {
@@ -25,11 +25,16 @@ function promptHydrateStructuredReport(
     displaySetInstanceUID
   );
 
-  return new Promise(async function(resolve, reject) {
-    const promptResult = await _askTrackMeasurements(
-      uiViewportDialogService,
-      viewportIndex
-    );
+  return new Promise(async function (resolve, reject) {
+    let promptResult;
+    if (appConfig?.disableHydration) {
+      promptResult = RESPONSE.HYDRATE_REPORT;
+    } else {
+      promptResult = await _askTrackMeasurements(
+        uiViewportDialogService,
+        viewportIndex
+      );
+    }
 
     // Need to do action here... So we can set state...
     let StudyInstanceUID, SeriesInstanceUIDs;
@@ -37,7 +42,7 @@ function promptHydrateStructuredReport(
     if (promptResult === RESPONSE.HYDRATE_REPORT) {
       console.warn('!! HYDRATING STRUCTURED REPORT');
       const hydrationResult = hydrateStructuredReport(
-        { servicesManager, extensionManager },
+        { servicesManager, extensionManager, appConfig },
         displaySetInstanceUID
       );
 
@@ -57,7 +62,7 @@ function promptHydrateStructuredReport(
 }
 
 function _askTrackMeasurements(uiViewportDialogService, viewportIndex) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     const message =
       'Do you want to continue tracking measurements for this study?';
     const actions = [

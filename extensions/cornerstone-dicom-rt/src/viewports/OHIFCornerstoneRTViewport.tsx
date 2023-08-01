@@ -25,6 +25,7 @@ function OHIFCornerstoneRTViewport(props) {
     viewportLabel,
     servicesManager,
     extensionManager,
+    appConfig,
   } = props;
 
   const {
@@ -41,6 +42,8 @@ function OHIFCornerstoneRTViewport(props) {
   if (displaySets.length > 1) {
     throw new Error('RT viewport should only have a single display set');
   }
+
+  const disableHydration = appConfig?.disableHydration;
 
   const rtDisplaySet = displaySets[0];
 
@@ -151,15 +154,17 @@ function OHIFCornerstoneRTViewport(props) {
       return;
     }
 
-    promptHydrateRT({
-      servicesManager,
-      viewportIndex,
-      rtDisplaySet,
-    }).then(isHydrated => {
-      if (isHydrated) {
-        setIsHydrated(true);
-      }
-    });
+    if (!disableHydration) {
+      promptHydrateRT({
+        servicesManager,
+        viewportIndex,
+        rtDisplaySet,
+      }).then(isHydrated => {
+        if (isHydrated) {
+          setIsHydrated(true);
+        }
+      });
+    }
   }, [servicesManager, viewportIndex, rtDisplaySet, rtIsLoading]);
 
   useEffect(() => {
@@ -302,6 +307,12 @@ function OHIFCornerstoneRTViewport(props) {
     SeriesNumber,
   } = referencedDisplaySetRef.current.metadata;
 
+  const isSegmentationReady = () => {
+    return segmentationService.getSegmentation(
+      rtDisplaySet.displaySetInstanceUID
+    );
+  };
+
   const onStatusClick = async () => {
     const isHydrated = await _hydrateRTDisplaySet({
       rtDisplaySet,
@@ -311,6 +322,12 @@ function OHIFCornerstoneRTViewport(props) {
 
     setIsHydrated(isHydrated);
   };
+
+  if (isSegmentationReady() && !rtIsLoading && disableHydration) {
+    setTimeout(() => {
+      onStatusClick();
+    }, 300);
+  }
 
   return (
     <>

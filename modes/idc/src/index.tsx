@@ -74,7 +74,12 @@ function modeFactory() {
     /**
      * Lifecycle hooks
      */
-    onModeEnter: ({ servicesManager, extensionManager, commandsManager }) => {
+    onModeEnter: ({
+      servicesManager,
+      extensionManager,
+      commandsManager,
+      appConfig,
+    }) => {
       const {
         measurementService,
         toolbarService,
@@ -82,6 +87,9 @@ function modeFactory() {
         panelService,
         segmentationService,
       } = servicesManager.services;
+
+      appConfig.disableHydration = true;
+      appConfig.disableEditing = true;
 
       measurementService.clearMeasurements();
 
@@ -154,7 +162,7 @@ function modeFactory() {
       //   ]),
       // ];
     },
-    onModeExit: ({ servicesManager }) => {
+    onModeExit: ({ servicesManager, appConfig }) => {
       const {
         toolGroupService,
         syncGroupService,
@@ -162,6 +170,9 @@ function modeFactory() {
         segmentationService,
         cornerstoneViewportService,
       } = servicesManager.services;
+
+      appConfig.disableHydration = false;
+      appConfig.disableEditing = false;
 
       _activatePanelTriggersSubscriptions.forEach(sub => sub.unsubscribe());
       _activatePanelTriggersSubscriptions = [];

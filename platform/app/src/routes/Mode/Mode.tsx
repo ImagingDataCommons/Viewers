@@ -332,6 +332,7 @@ export default function ModeRoute({
         servicesManager,
         extensionManager,
         commandsManager,
+        appConfig: extensionManager._appConfig,
       });
 
       /**
@@ -403,6 +404,7 @@ export default function ModeRoute({
         mode?.onModeExit?.({
           servicesManager,
           extensionManager,
+          appConfig: extensionManager._appConfig,
         });
       } catch (e) {
         console.warn('mode exit failure', e);
