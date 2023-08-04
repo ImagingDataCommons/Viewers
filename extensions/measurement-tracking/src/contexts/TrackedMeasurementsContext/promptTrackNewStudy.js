@@ -7,15 +7,24 @@ const RESPONSE = {
   NO_NOT_FOR_SERIES: 4,
 };
 
-function promptTrackNewStudy({ servicesManager, extensionManager }, ctx, evt) {
+function promptTrackNewStudy(
+  { servicesManager, extensionManager, appConfig },
+  ctx,
+  evt
+) {
   const { UIViewportDialogService } = servicesManager.services;
   const { viewportIndex, StudyInstanceUID, SeriesInstanceUID } = evt;
 
-  return new Promise(async function(resolve, reject) {
-    let promptResult = await _askTrackMeasurements(
-      UIViewportDialogService,
-      viewportIndex
-    );
+  return new Promise(async function (resolve, reject) {
+    let promptResult;
+    if (appConfig?.disableHydration) {
+      promptResult = RESPONSE.SET_STUDY_AND_SERIES;
+    } else {
+      promptResult = await _askTrackMeasurements(
+        UIViewportDialogService,
+        viewportIndex
+      );
+    }
 
     if (promptResult === RESPONSE.SET_STUDY_AND_SERIES) {
       promptResult = ctx.isDirty
@@ -34,7 +43,7 @@ function promptTrackNewStudy({ servicesManager, extensionManager }, ctx, evt) {
 }
 
 function _askTrackMeasurements(UIViewportDialogService, viewportIndex) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     const message = 'Track measurements for this series?';
     const actions = [
       { type: 'cancel', text: 'No', value: RESPONSE.CANCEL },
@@ -69,7 +78,7 @@ function _askTrackMeasurements(UIViewportDialogService, viewportIndex) {
 }
 
 function _askSaveDiscardOrCancel(UIViewportDialogService, viewportIndex) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     const message =
       'Measurements cannot span across multiple studies. Do you want to save your tracked measurements?';
     const actions = [

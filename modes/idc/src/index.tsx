@@ -1,11 +1,21 @@
+import {
+  eventTarget,
+  EVENTS,
+  cache as cs3DCache,
+  volumeLoader
+} from '@cornerstonejs/core';
 import { hotkeys } from '@ohif/core';
 import toolbarButtons from './toolbarButtons.js';
 import { id } from './id.js';
 import initToolGroups from './initToolGroups.js';
+import { hydrateSEGDisplaySet } from '@ohif/extension-cornerstone-dicom-seg';
+import {hydrateRTDisplaySet} from '@ohif/extension-cornerstone-dicom-rt';
+import { hydrateStructuredReport } from '@ohif/extension-cornerstone-dicom-sr';
 
 // Allow this mode by excluding non-imaging modalities such as SR, SEG
 // Also, SM is not a simple imaging modalities, so exclude it.
 const NON_IMAGE_MODALITIES = ['SM', 'ECG', 'SR', 'SEG', 'RTSTRUCT'];
+const delay = 50;
 
 const ohif = {
   layout: '@ohif/extension-default.layoutTemplateModule.viewerLayout',
@@ -63,8 +73,93 @@ const extensionDependencies = {
   '@ohif/extension-dicom-video': '^3.0.1',
 };
 
+function getDerivedSequences(displaySetUID, servicesManager) {
+  const { displaySetService} = servicesManager.services;
+
+  const displaySetCache = displaySetService.getDisplaySetCache();
+  const derivedDisplaySets = [...displaySetCache.values()].filter(
+    ds => {
+      if (ds?.getReferenceDisplaySet) {
+        ds?.getReferenceDisplaySet();
+      }
+      return (ds?.referencedDisplaySetInstanceUID === displaySetUID || ds.Modality === 'SR') && !ds?.isHydrated;
+    }
+  );
+  return derivedDisplaySets;
+}
+
+function loadDerivedDisplaySets(servicesManager, extensionManager, appConfig, evt) {
+  async function checkVolume(displaySet, imageIds) {
+    const VOLUME_LOADER_SCHEME = 'cornerstoneStreamingImageVolume';
+    const volumeLoaderSchema =
+    displaySet.volumeLoaderSchema ?? VOLUME_LOADER_SCHEME;
+
+    const volumeId = `${volumeLoaderSchema}:${displaySet.displaySetInstanceUID}`;
+
+    let volume = cs3DCache.getVolume(volumeId);
+
+    if (!volume) {
+      volume = await volumeLoader.createAndCacheVolume(volumeId, { imageIds });
+    }
+  }
+
+  const {
+    userAuthenticationService,
+    displaySetService,
+    viewportGridService,
+  } = servicesManager.services;
+
+  const { viewports } = viewportGridService.getState();
+  const { viewportId, imageIds } = evt.detail;
+  let viewportIndex = -1;
+  for (let i=0; i < viewports.length; i++) {
+      if (viewports[i].viewportId = viewportId) {
+          viewportIndex = i;
+          break;
+      }
+  }
+  const mainViewport = viewports[viewportIndex];
+  if (viewportIndex > -1) {
+    if (mainViewport.displaySetInstanceUIDs.length === 1) {
+      const mainDisplaySet = displaySetService.getDisplaySetByUID(mainViewport.displaySetInstanceUIDs[0]);
+      const derivedDisplaySets = getDerivedSequences(mainViewport.displaySetInstanceUIDs[0], servicesManager);
+
+      derivedDisplaySets.forEach(
+        async (displaySet) => {
+          const headers = userAuthenticationService.getAuthorizationHeader();
+          await checkVolume(mainDisplaySet, imageIds);
+          await displaySet.load({ headers });
+          const derivedDisplaySetInstanceUID = displaySet.displaySetInstanceUID;
+          if (displaySet.Modality === 'SEG') {
+             setTimeout(() => {
+               if (!mainViewport.displaySetInstanceUIDs.includes(derivedDisplaySetInstanceUID)) {
+                mainViewport.displaySetInstanceUIDs.push(derivedDisplaySetInstanceUID)
+               }
+               hydrateSEGDisplaySet({segDisplaySet: displaySet, viewportIndex, servicesManager});
+             }, delay);
+          } else if (displaySet.Modality === 'RTSTRUCT') {
+            setTimeout(() => {
+              if (!mainViewport.displaySetInstanceUIDs.includes(derivedDisplaySetInstanceUID)) {
+               mainViewport.displaySetInstanceUIDs.push(derivedDisplaySetInstanceUID)
+              }
+              hydrateRTDisplaySet({rtDisplaySet: displaySet, viewportIndex, servicesManager});
+            }, delay);
+         } else if (displaySet.Modality === 'SR') {
+          setTimeout(() => {
+            if (!mainViewport.displaySetInstanceUIDs.includes(derivedDisplaySetInstanceUID)) {
+             mainViewport.displaySetInstanceUIDs.push(derivedDisplaySetInstanceUID)
+            }
+            hydrateStructuredReport({servicesManager, extensionManager, appConfig}, derivedDisplaySetInstanceUID);
+          }, delay);
+        }
+      })
+    }
+  }
+}
+
 function modeFactory() {
   let _activatePanelTriggersSubscriptions = [];
+  let boundedLoadDerivedDisplaySets;
   return {
     // TODO: We're using this as a route segment
     // We should not be.
@@ -90,6 +185,7 @@ function modeFactory() {
 
       appConfig.disableHydration = true;
       appConfig.disableEditing = true;
+      boundedLoadDerivedDisplaySets = loadDerivedDisplaySets.bind(null, servicesManager, extensionManager, appConfig)
 
       measurementService.clearMeasurements();
 
@@ -140,6 +236,8 @@ function modeFactory() {
         'MoreTools',
       ]);
 
+      eventTarget.addEventListener(EVENTS.STACK_VIEWPORT_NEW_STACK, boundedLoadDerivedDisplaySets);
+
       // // ActivatePanel event trigger for when a segmentation or measurement is added.
       // // Do not force activation so as to respect the state the user may have left the UI in.
       // _activatePanelTriggersSubscriptions = [
@@ -170,6 +268,8 @@ function modeFactory() {
         segmentationService,
         cornerstoneViewportService,
       } = servicesManager.services;
+
+      eventTarget.removeEventListener(EVENTS.STACK_VIEWPORT_NEW_STACK, boundedLoadDerivedDisplaySets);
 
       appConfig.disableHydration = false;
       appConfig.disableEditing = false;

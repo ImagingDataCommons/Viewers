@@ -8,15 +8,24 @@ const RESPONSE = {
   SET_STUDY_AND_SERIES: 3,
 };
 
-function promptBeginTracking({ servicesManager, extensionManager }, ctx, evt) {
+function promptBeginTracking(
+  { servicesManager, extensionManager, appConfig },
+  ctx,
+  evt
+) {
   const { uiViewportDialogService } = servicesManager.services;
   const { viewportIndex, StudyInstanceUID, SeriesInstanceUID } = evt;
 
-  return new Promise(async function(resolve, reject) {
-    let promptResult = await _askTrackMeasurements(
-      uiViewportDialogService,
-      viewportIndex
-    );
+  return new Promise(async function (resolve, reject) {
+    let promptResult;
+    if (appConfig?.disableHydration) {
+      promptResult = RESPONSE.SET_STUDY_AND_SERIES;
+    } else {
+      promptResult = await _askTrackMeasurements(
+        uiViewportDialogService,
+        viewportIndex
+      );
+    }
 
     resolve({
       userResponse: promptResult,
@@ -28,7 +37,7 @@ function promptBeginTracking({ servicesManager, extensionManager }, ctx, evt) {
 }
 
 function _askTrackMeasurements(uiViewportDialogService, viewportIndex) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     const message = 'Track measurements for this series?';
     const actions = [
       {

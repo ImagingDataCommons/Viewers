@@ -125,14 +125,17 @@ function TrackedMeasurementsContextProvider(
     promptBeginTracking: promptBeginTracking.bind(null, {
       servicesManager,
       extensionManager,
+      appConfig,
     }),
     promptTrackNewSeries: promptTrackNewSeries.bind(null, {
       servicesManager,
       extensionManager,
+      appConfig,
     }),
     promptTrackNewStudy: promptTrackNewStudy.bind(null, {
       servicesManager,
       extensionManager,
+      appConfig,
     }),
     promptSaveReport: promptSaveReport.bind(null, {
       servicesManager,
