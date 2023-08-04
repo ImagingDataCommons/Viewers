@@ -88,6 +88,7 @@ window.config = {
       namespace: '@ohif/extension-default.dataSourcesModule.dicomweb',
       sourceName: 'dicomweb',
       configuration: {
+        friendlyName: 'dcmjs DICOMWeb Server',
         name: 'aws',
         wadoUriRoot:
           'https://proxy.imaging.datacommons.cancer.gov/current/viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
@@ -121,26 +122,27 @@ window.config = {
       },
     },
     {
-      friendlyName: 'dicomweb delegating proxy',
       namespace: '@ohif/extension-default.dataSourcesModule.dicomwebproxy',
       sourceName: 'dicomwebproxy',
       configuration: {
+        friendlyName: 'dicomweb delegating proxy',
         name: 'dicomwebproxy',
       },
     },
     {
-      friendlyName: 'dicom json',
       namespace: '@ohif/extension-default.dataSourcesModule.dicomjson',
       sourceName: 'dicomjson',
       configuration: {
+        friendlyName: 'dicom json',
         name: 'json',
       },
     },
     {
-      friendlyName: 'dicom local',
       namespace: '@ohif/extension-default.dataSourcesModule.dicomlocal',
       sourceName: 'dicomlocal',
-      configuration: {},
+      configuration: {
+        friendlyName: 'dicom local',
+      },
     },
   ],
   httpErrorHandler: error => {

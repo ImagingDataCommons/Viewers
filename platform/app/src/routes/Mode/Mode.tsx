@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // TODO: DicomMetadataStore should be injected?
 import { DicomMetadataStore, ServicesManager, utils } from '@ohif/core';
 import { DragAndDropProvider, ImageViewerProvider } from '@ohif/ui';
-import { useQuery, useSearchParams } from '@hooks';
+import { useSearchParams } from '@hooks';
 import ViewportGrid from '@components/ViewportGrid';
 import Compose from './Compose';
 import getStudies from './studiesList';
@@ -95,7 +95,7 @@ export default function ModeRoute({
 }) {
   // Parse route params/querystring
   const location = useLocation();
-  const query = useQuery();
+  const query = new URLSearchParams(location.search);
   const params = useParams();
   const searchParams = useSearchParams();
 
