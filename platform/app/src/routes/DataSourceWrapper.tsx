@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ExtensionManager, MODULE_TYPES } from '@ohif/core';
 //
-import { extensionManager } from '../App.tsx';
+import { extensionManager, servicesManager } from '../App.tsx';
 import { useParams, useLocation } from 'react-router';
 import useSearchParams from '../hooks/useSearchParams.ts';
 
@@ -151,8 +151,19 @@ function DataSourceWrapper(props) {
     async function getData() {
       setIsLoading(true);
 
-      const studies = await dataSource.query.studies.search(queryFilterValues);
-
+      let studies = [];
+      try {
+        studies = await dataSource.query.studies.search(queryFilterValues);
+      } catch (error) {
+        const { uiNotificationService } = servicesManager.services;
+        uiNotificationService.show({
+          title: 'Get study list',
+          message: 'Problems occurred communicating to the server.',
+          type: 'error',
+          duration: 7000,
+        });
+        console.error(error);
+      }
       setData({
         studies: studies || [],
         total: studies.length,

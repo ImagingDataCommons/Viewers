@@ -19,6 +19,7 @@ import {
   HangingProtocolService,
   hotkeys,
   CommandsManager,
+  DicomMetadataStore,
 } from '@ohif/core';
 import { useAppConfig } from '@state';
 import Toolbar from '../Toolbar/Toolbar';
@@ -77,7 +78,10 @@ function ViewerLayout({
     appConfig.showLoadingIndicator
   );
 
-  const { hangingProtocolService } = servicesManager.services;
+  const {
+    hangingProtocolService,
+    uiNotificationService,
+  } = servicesManager.services;
 
   const { hotkeyDefinitions, hotkeyDefaults } = hotkeysManager;
   const versionNumber = process.env.VERSION_NUMBER;
@@ -187,7 +191,7 @@ function ViewerLayout({
   };
 
   useEffect(() => {
-    const { unsubscribe } = hangingProtocolService.subscribe(
+    const { unsubscribeHP } = hangingProtocolService.subscribe(
       HangingProtocolService.EVENTS.PROTOCOL_CHANGED,
 
       // Todo: right now to set the loading indicator to false, we need to wait for the
@@ -197,9 +201,28 @@ function ViewerLayout({
         setShowLoadingIndicator(false);
       }
     );
+    const { unsubscribeDS } = DicomMetadataStore.subscribe(
+      DicomMetadataStore.EVENTS.INVALID_STUDY,
+
+      // Todo: right now to set the loading indicator to false, we need to wait for the
+      // hangingProtocolService to finish applying the viewport matching to each viewport,
+      // however, this might not be the only approach to set the loading indicator to false. we need to explore this further.
+      () => {
+        uiNotificationService.show({
+          title: 'Search studies',
+          message:
+            'The url used to open this study appears to be invalid. Please check.',
+          type: 'error',
+          duration: 7000,
+        });
+
+        setShowLoadingIndicator(false);
+      }
+    );
 
     return () => {
-      unsubscribe();
+      unsubscribeHP();
+      unsubscribeDS();
     };
   }, [hangingProtocolService]);
 

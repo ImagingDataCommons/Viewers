@@ -56,7 +56,7 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
     wadoConfig,
     qidoDicomWebClient,
     wadoDicomWebClient,
-    getAuthrorizationHeader,
+    getAuthorizationHeader,
     generateWadoHeader;
 
   const implementation = {
@@ -73,7 +73,7 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
 
       dicomWebConfigCopy = JSON.parse(JSON.stringify(dicomWebConfig));
 
-      getAuthrorizationHeader = () => {
+      getAuthorizationHeader = () => {
         const xhrRequestHeaders = {};
         const authHeaders = userAuthenticationService.getAuthorizationHeader();
         if (authHeaders && authHeaders.Authorization) {
@@ -83,7 +83,7 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
       };
 
       generateWadoHeader = () => {
-        let authorizationHeader = getAuthrorizationHeader();
+        let authorizationHeader = getAuthorizationHeader();
         //Generate accept header depending on config params
         let formattedAcceptHeader = utils.generateAcceptHeader(
           dicomWebConfig.acceptHeader,
@@ -126,29 +126,29 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
     query: {
       studies: {
         mapParams: mapParams.bind(),
-        search: async function(origParams) {
-          qidoDicomWebClient.headers = getAuthrorizationHeader();
+        search: async function (origParams) {
+          qidoDicomWebClient.headers = getAuthorizationHeader();
           const { studyInstanceUid, seriesInstanceUid, ...mappedParams } =
             mapParams(origParams, {
               supportsFuzzyMatching: dicomWebConfig.supportsFuzzyMatching,
               supportsWildcard: dicomWebConfig.supportsWildcard,
             }) || {};
 
-          const results = await qidoSearch(
+          let results = [];
+          results = await qidoSearch(
             qidoDicomWebClient,
             undefined,
             undefined,
             mappedParams
           );
-
           return processResults(results);
         },
         processResults: processResults.bind(),
       },
       series: {
         // mapParams: mapParams.bind(),
-        search: async function(studyInstanceUid) {
-          qidoDicomWebClient.headers = getAuthrorizationHeader();
+        search: async function (studyInstanceUid) {
+          qidoDicomWebClient.headers = getAuthorizationHeader();
           const results = await seriesInStudy(
             qidoDicomWebClient,
             studyInstanceUid
@@ -160,7 +160,7 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
       },
       instances: {
         search: (studyInstanceUid, queryParameters) => {
-          qidoDicomWebClient.headers = getAuthrorizationHeader();
+          qidoDicomWebClient.headers = getAuthorizationHeader();
           qidoSearch.call(
             undefined,
             qidoDicomWebClient,
@@ -193,7 +193,7 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
         );
       },
       bulkDataURI: async ({ StudyInstanceUID, BulkDataURI }) => {
-        qidoDicomWebClient.headers = getAuthrorizationHeader();
+        qidoDicomWebClient.headers = getAuthorizationHeader();
         const options = {
           multipart: false,
           BulkDataURI,
@@ -241,7 +241,7 @@ function createDicomWebApi(dicomWebConfig, userAuthenticationService) {
 
     store: {
       dicom: async (dataset, request) => {
-        wadoDicomWebClient.headers = getAuthrorizationHeader();
+        wadoDicomWebClient.headers = getAuthorizationHeader();
         if (dataset instanceof ArrayBuffer) {
           const options = {
             datasets: [dataset],

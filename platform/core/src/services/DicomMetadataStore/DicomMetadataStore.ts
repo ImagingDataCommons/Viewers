@@ -8,6 +8,9 @@ const EVENTS = {
   INSTANCES_ADDED: 'event::dicomMetadataStore:instancesAdded',
   SERIES_ADDED: 'event::dicomMetadataStore:seriesAdded',
   SERIES_UPDATED: 'event::dicomMetadataStore:seriesUpdated',
+  INVALID_SERVER: 'event::dicomMetadataStore:invalidServer',
+  INVALID_STUDY: 'event::dicomMetadataStore:invalidStudy',
+  INVALID_SERIES: 'event::dicomMetadataStore:invalidSeries',
 };
 
 /**
@@ -253,6 +256,15 @@ const BaseImplementation = {
 
       _model.studies.push(newStudy);
     }
+  },
+  notifyInvalidServer() {
+    this._broadcastEvent(EVENTS.INVALID_SERVER, {});
+  },
+  notifyInvalidStudy() {
+    this._broadcastEvent(EVENTS.INVALID_STUDY, {});
+  },
+  notifyInvalidSeries(SeriesInstanceUID) {
+    this._broadcastEvent(EVENTS.INVALID_SERIES, { SeriesInstanceUID });
   },
   getStudyInstanceUIDs: _getStudyInstanceUIDs,
   getStudy: _getStudy,

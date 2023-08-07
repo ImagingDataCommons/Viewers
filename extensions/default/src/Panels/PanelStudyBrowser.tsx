@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { StudyBrowser, useImageViewer, useViewportGrid } from '@ohif/ui';
-import { utils } from '@ohif/core';
+import { DicomMetadataStore, utils } from '@ohif/core';
 
 const { sortStudyInstances, formatDate } = utils;
 
@@ -68,6 +68,11 @@ function PanelStudyBrowser({
       const qidoForStudyUID = await dataSource.query.studies.search({
         studyInstanceUid: StudyInstanceUID,
       });
+
+      if (!qidoForStudyUID.length) {
+        DicomMetadataStore.notifyInvalidStudy();
+        throw new Error('Invalid study URL');
+      }
 
       let qidoStudiesForPatient = qidoForStudyUID;
 
