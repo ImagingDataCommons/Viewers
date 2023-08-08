@@ -39,7 +39,7 @@ window.config = {
     prefetch: 25,
   },
   // filterQueryParam: false,
-  defaultDataSourceName: 'gcpdicomweb',
+  defaultDataSourceName: 'idc-dicomweb',
   /* Dynamic config allows user to pass "configUrl" query string this allows to load config without recompiling application. The regex will ensure valid configuration source */
   // dangerouslyUseDynamicConfig: {
   //   enabled: true,
@@ -69,9 +69,9 @@ window.config = {
     {
       friendlyName: 'GCP DICOMWeb Server',
       namespace: '@ohif/extension-default.dataSourcesModule.dicomweb',
-      sourceName: 'gcpdicomweb',
+      sourceName: 'gcp-dicomweb',
       configuration: {
-        name: 'gcpdicomweb',
+        name: 'gcp-dicomweb',
         qidoSupportsIncludeField: false,
         imageRendering: 'wadors',
         thumbnailRendering: 'wadors',
@@ -97,9 +97,9 @@ window.config = {
     {
       friendlyName: 'dcmjs DICOMWeb Server',
       namespace: '@ohif/extension-default.dataSourcesModule.dicomweb',
-      sourceName: 'idcdicomweb',
+      sourceName: 'idc-dicomweb',
       configuration: {
-        name: 'aws',
+        name: 'idc-dicomweb',
         wadoUriRoot:
           'https://proxy.imaging.datacommons.cancer.gov/current/viewer-only-no-downloads-see-tinyurl-dot-com-slash-3j3d9jyp/dicomWeb',
         qidoRoot:
@@ -133,7 +133,7 @@ window.config = {
     },
     {
       namespace: '@ohif/extension-default.dataSourcesModule.dicomweb',
-      sourceName: 'ohifdicomweb',
+      sourceName: 'dicomweb',
       configuration: {
         friendlyName: 'dcmjs DICOMWeb Server',
         name: 'aws',
