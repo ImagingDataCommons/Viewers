@@ -90,8 +90,8 @@
     "react-resize-detector": "^6.7.6",
     "react-router": "^6.8.1",
     "react-router-dom": "^6.8.1",
-    "ohif-idc-mode": "https://github.com/ImagingDataCommons/ohif-idc-mode#main",
-    "ohif-gcp-mode": "https://github.com/ImagingDataCommons/ohif-gcp-mode#main"
+    "ohif-idc-mode": "https://github.com/ImagingDataCommons/ohif-idc-mode#main-1.0.0",
+    "ohif-gcp-mode": "https://github.com/ImagingDataCommons/ohif-gcp-mode#main-1.0.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-methods": "^7.18.6",
