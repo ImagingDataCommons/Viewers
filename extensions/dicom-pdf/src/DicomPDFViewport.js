@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import dicomParser from 'dicom-parser';
-import PDFJS from 'pdfjs-dist';
+import PDFJS, { isEvalSupported } from 'pdfjs-dist';
 import PropTypes from 'prop-types';
 
 import TypedArrayProp from './TypedArrayProp';
@@ -46,14 +46,17 @@ class DicomPDFViewport extends Component {
   };
 
   async componentDidMount() {
-    const { rawPdf } = this.props
+    const { rawPdf } = this.props;
     const dataSet = !rawPdf && this.parseByteArray(this.props.byteArray);
     const fileURL = this.getPDFFileUrl(dataSet, this.props.byteArray);
 
     this.setState(state => ({ ...state, fileURL }));
 
     if (!this.props.useNative) {
-      const pdf = await PDFJS.getDocument(fileURL).promise;
+      const pdf = await PDFJS.getDocument({
+        url: fileURL,
+        isEvalSupported: false,
+      }).promise;
       this.setState(state => ({ ...state, pdf }), () => this.updatePDFCanvas());
     }
   }
