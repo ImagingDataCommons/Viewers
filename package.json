@@ -46,14 +46,14 @@
     "core-js": "^3.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.0",
-    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/core": "^7.23.2",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-arrow-functions": "^7.2.0",
     "@babel/plugin-transform-regenerator": "^7.4.5",
-    "@babel/plugin-transform-runtime": "^7.5.0",
-    "@babel/preset-env": "^7.5.0",
+    "@babel/plugin-transform-runtime": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.0.0",
     "@percy/cypress": "^2.2.0",
     "@webpack-cli/serve": "^1.6.1",
@@ -78,7 +78,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "1.5.0",
-    "extract-css-chunks-webpack-plugin": "^4.5.4",
+    "extract-css-chunks-webpack-plugin": "^4.10.0",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^3.0.0",
     "jest": "^24.8.0",
@@ -125,6 +125,10 @@
     ]
   },
   "resolutions": {
+    "@babel/core": "7.23.2",
+    "@babel/traverse": "7.23.2",
+    "@babel/preset-env": "7.23.2",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
     "js-yaml": "3.13.1",
     "kind-of": "6.0.3",
     "acorn": "6.4.1",
@@ -164,7 +168,9 @@
     "**/node-gyp": "8.4.1",
     "**/@babel/runtime": "7.5.5",
     "fast-xml-parser": "4.2.4",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz",
-    "lodash.pick": "https://github.com/lodash/lodash/archive/refs/tags/4.17.21.tar.gz"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
+    "lodash.pick": "https://github.com/lodash/lodash/archive/refs/tags/4.17.21.tar.gz",
+    "lodash.template": "https://github.com/lodash/lodash/archive/refs/tags/4.17.21.tar.gz",
+    "html-minifier": "npm:html-minifier-terser@7.2.0"
   }
 }
