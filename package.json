@@ -171,6 +171,8 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
     "lodash.pick": "https://github.com/lodash/lodash/archive/refs/tags/4.17.21.tar.gz",
     "lodash.template": "https://github.com/lodash/lodash/archive/refs/tags/4.17.21.tar.gz",
-    "html-minifier": "npm:html-minifier-terser@7.2.0"
+    "html-minifier": "npm:html-minifier-terser@7.2.0",
+    "socks": "2.8.3",
+    "ip": "https://registry.npmjs.org/ip-address/-/ip-address-9.0.5.tgz"
   }
 }
