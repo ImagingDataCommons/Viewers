@@ -167,7 +167,7 @@
     "minimist": "1.2.8",
     "**/node-gyp": "8.4.1",
     "**/@babel/runtime": "7.5.5",
-    "fast-xml-parser": "4.2.4",
+    "fast-xml-parser": "4.4.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
     "lodash.pick": "https://github.com/lodash/lodash/archive/refs/tags/4.17.21.tar.gz",
     "lodash.template": "https://github.com/lodash/lodash/archive/refs/tags/4.17.21.tar.gz",
