@@ -59,6 +59,7 @@
     "json-schema": "0.4.0",
     "minimist": "1.2.8",
     "lodash.pick": "https://github.com/lodash/lodash/archive/refs/tags/4.17.21.tar.gz",
-    "ip": "https://registry.npmjs.org/ip-address/-/ip-address-9.0.5.tgz"
+    "ip": "https://registry.npmjs.org/ip-address/-/ip-address-9.0.5.tgz",
+    "semver": "7.5.2"
   }
 }
